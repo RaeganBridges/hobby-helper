@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hobby Helper</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #e8bdd0;
+        overflow-x: hidden;
+      }
+      
+      #splash {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: #E45B8B;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 1;
+        transition: opacity 0.5s ease-out;
+        pointer-events: none;
+      }
+      
+      #splash.fade-out {
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="splash" aria-hidden="true"></div>
+    <!-- React mounts here (must match main.tsx #root) -->
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      window.addEventListener('DOMContentLoaded', () => {
+        const splash = document.getElementById('splash');
+        setTimeout(() => {
+          splash?.classList.add('fade-out');
+          setTimeout(() => splash?.remove(), 500);
+        }, 1500);
+      });
+    </script>
+  </body>
+</html>
