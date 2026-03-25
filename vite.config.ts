@@ -11,6 +11,14 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(root, 'index.html'),
+        app: path.resolve(root, 'app.html'),
+      },
+    },
+  },
   resolve: {
     alias: {
       '@': path.resolve(root, './src'),

@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router";
 import imgLogo1 from "figma:asset/89b09710aad68d4400b9fc8c7058b8276103e194.png";
 import { motion } from 'motion/react';
 
@@ -31,8 +30,6 @@ function HobbyCard({
 }
 
 export default function Home() {
-  const navigate = useNavigate();
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -42,9 +39,7 @@ export default function Home() {
       className="relative w-full h-full min-h-0 bg-white"
     >
       <div className="relative w-full max-w-[430px] mx-auto h-full min-h-[932px] overflow-hidden">
-        <div className="absolute inset-0 bg-[#ffcce0] opacity-40">
-          <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_35px_-10px_rgba(0,0,0,0.1)]" />
-        </div>
+        <div className="absolute inset-0 pointer-events-none shadow-[inset_0px_0px_35px_-10px_rgba(0,0,0,0.1)]" />
         <div className="absolute bg-[#ff75a5] h-[205px] left-0 top-0 w-full rounded-t-none rounded-b-[55px]">
           <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_5px_15px_10px_rgba(0,0,0,0.1)]" />
         </div>
@@ -121,7 +116,7 @@ export default function Home() {
           <p className="absolute font-icebox-magnet leading-[normal] left-[22px] not-italic text-[24px] text-white top-[6px] whitespace-nowrap">2</p>
         </button>
 
-        <button onClick={() => navigate('/')} className="absolute left-[157px] top-[852px] cursor-pointer">
+        <button type="button" onClick={() => { window.location.assign('hobbies.html'); }} className="absolute left-[157px] top-[852px] cursor-pointer">
           <div className="absolute bg-[#e45b8b] h-[42px] left-0 rounded-[25px] top-0 w-[116px]">
             <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_7px_0px_rgba(0,0,0,0.25)]" />
           </div>

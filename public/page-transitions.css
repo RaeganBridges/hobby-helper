@@ -1,0 +1,40 @@
+/**
+ * Cross-document fade between .html pages (Chromium View Transitions).
+ * Single duration + linear easing on every VT pseudo so timing stays aligned
+ * whether the user navigates slowly or clicks through quickly (no ease mismatch with UA group defaults).
+ */
+
+:root {
+  --hh-vt-duration: 300ms;
+  --hh-vt-easing: linear;
+}
+
+@view-transition {
+  navigation: auto;
+}
+
+/* Match / override UA defaults on the group (defaults are often ~250ms + ease) */
+:root::view-transition-group(*) {
+  animation-duration: var(--hh-vt-duration);
+  animation-timing-function: var(--hh-vt-easing);
+  animation-fill-mode: both;
+}
+
+::view-transition-image-pair(root) {
+  animation-duration: var(--hh-vt-duration);
+  animation-timing-function: var(--hh-vt-easing);
+  animation-fill-mode: both;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--hh-vt-duration);
+  animation-timing-function: var(--hh-vt-easing);
+  animation-fill-mode: both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --hh-vt-duration: 0.001ms;
+  }
+}

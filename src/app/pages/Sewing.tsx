@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router";
 import { useState, useEffect } from "react";
 import svgPaths from "../../imports/svg-b9ct596ajp";
 import { motion } from 'motion/react';
@@ -36,7 +35,6 @@ function SewingPlayedCheck() {
 }
 
 export default function Sewing() {
-  const navigate = useNavigate();
   const [playedWeeks, setPlayedWeeks] = useState<Set<number>>(new Set());
 
   // Load played weeks from localStorage on mount
@@ -241,7 +239,7 @@ export default function Sewing() {
             <p className="absolute font-icebox-magnet leading-[normal] left-[22px] not-italic text-[#8f6922] text-[24px] top-[6px] whitespace-nowrap">2</p>
           </button>
 
-          <button onClick={() => navigate('/')} className="absolute left-[157px] top-[852px] cursor-pointer hover:opacity-80">
+          <button type="button" onClick={() => { window.location.assign('hobbies.html'); }} className="absolute left-[157px] top-[852px] cursor-pointer hover:opacity-80">
             <div className="absolute bg-[#ffdc69] h-[42px] left-0 rounded-[25px] top-0 w-[116px]" />
             <p className="absolute font-icebox-magnet leading-[normal] left-[17px] not-italic text-[#8f6922] text-[24px] top-[6px] whitespace-nowrap">Hobbies</p>
           </button>
