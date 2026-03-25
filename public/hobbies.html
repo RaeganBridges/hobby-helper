@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="view-transition" content="same-origin" />
   <title>Hobbies — Hobby Helper</title>
   <link rel="stylesheet" href="page-transitions.css" />
@@ -45,6 +45,9 @@
     }
 
     * { box-sizing: border-box; }
+    html {
+      background-color: #e8bdd0;
+    }
     body {
       margin: 0;
       min-height: 100dvh;
@@ -69,6 +72,34 @@
       position: relative;
       overflow-x: hidden;
       overflow-y: auto;
+    }
+
+    @media (max-width: 767px) {
+      body {
+        overflow: hidden;
+      }
+      .page-wrap {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        min-height: 0;
+        padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
+          env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+        box-sizing: border-box;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        overflow: hidden;
+      }
+      .shell {
+        flex: 1 1 auto;
+        min-height: 0;
+        width: 100%;
+        max-width: 430px;
+        height: auto !important;
+        margin: 0 auto;
+        -webkit-overflow-scrolling: touch;
+      }
     }
 
     @media (min-width: 768px) {
