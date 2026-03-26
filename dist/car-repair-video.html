@@ -47,34 +47,47 @@
       flex-direction: column;
     }
     @media (max-width: 767px) {
-      body {
+      /* Lock document: one screen, no scroll. Pink shows in safe areas via page-wrap padding. */
+      html {
+        height: 100%;
         overflow: hidden;
+      }
+      body {
+        height: 100%;
+        max-height: 100%;
+        overflow: hidden;
+        overscroll-behavior: none;
       }
       .page-wrap {
         position: fixed;
         inset: 0;
         z-index: 0;
-        min-height: 0;
         padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
           env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
         box-sizing: border-box;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
         overflow: hidden;
-      }
-      /* Shell must get a definite height: .frame has only abs-positioned kids (no in-flow height). */
-      .shell {
-        flex: 1 1 0;
+        display: block;
         min-height: 0;
+      }
+      /*
+        Do not use flex on .shell here: .frame is position:absolute (video fills it).
+        A flex shell with only an out-of-flow child gets 0 height → black video.
+      */
+      .shell {
+        display: block;
+        height: 100%;
         width: 100%;
         max-width: 430px;
         margin: 0 auto;
-        align-self: stretch;
-        -webkit-overflow-scrolling: touch;
+        overflow: hidden;
       }
       .frame {
-        flex: 1 1 0;
+        position: absolute;
+        inset: 0;
+        flex: none;
+        width: auto;
+        max-width: none;
+        margin: 0;
         min-height: 0;
       }
     }
@@ -111,6 +124,8 @@
       height: 100%;
       object-fit: cover;
       object-position: center;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
     }
 
     .video-close {
@@ -170,6 +185,10 @@
       var v = document.getElementById('car-video-el');
       if (!v) return;
       v.muted = true;
+      v.defaultMuted = true;
+      v.playsInline = true;
+      v.setAttribute('playsinline', '');
+      v.setAttribute('webkit-playsinline', '');
       function tryPlay() {
         var p = v.play();
         if (p && typeof p.catch === 'function') {
