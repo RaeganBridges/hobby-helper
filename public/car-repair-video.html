@@ -161,6 +161,32 @@
       opacity: 0.85;
       outline: none;
     }
+
+    /* Opt-in: add ?debug=1 to the URL */
+    #video-debug-panel {
+      display: none;
+      position: fixed;
+      left: 8px;
+      right: 8px;
+      bottom: max(8px, env(safe-area-inset-bottom, 0px));
+      max-height: 42vh;
+      overflow: auto;
+      margin: 0;
+      padding: 8px 10px;
+      font: 11px/1.35 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: #d8ffd8;
+      background: rgba(0, 0, 0, 0.85);
+      border-radius: 8px;
+      z-index: 10000;
+      pointer-events: none;
+      text-align: left;
+      white-space: pre-wrap;
+      word-break: break-word;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+    }
+    body.video-debug-on #video-debug-panel {
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -210,6 +236,57 @@
       v.addEventListener('error', function () {
         v.setAttribute('controls', '');
       });
+
+      /* ?debug=1 — layout + playback diagnostics (Safari / phone black-screen) */
+      try {
+        if (new URLSearchParams(window.location.search).get('debug') !== '1') return;
+        document.body.classList.add('video-debug-on');
+        var panel = document.createElement('pre');
+        panel.id = 'video-debug-panel';
+        panel.setAttribute('aria-live', 'polite');
+        document.body.appendChild(panel);
+        function fmtRect(el, label) {
+          if (!el) return label + ': (missing)';
+          var r = el.getBoundingClientRect();
+          return (
+            label +
+            ': w=' +
+            Math.round(r.width) +
+            ' h=' +
+            Math.round(r.height) +
+            ' t=' +
+            Math.round(r.top)
+          );
+        }
+        function errLine() {
+          var e = v.error;
+          if (!e) return 'error: none';
+          return 'error: code=' + e.code + ' (' + (e.message || 'n/a') + ')';
+        }
+        function tick() {
+          var frame = document.querySelector('.frame');
+          var shell = document.querySelector('.shell');
+          var wrap = document.querySelector('.page-wrap');
+          var lines = [
+            'debug=1 | ' + (window.innerWidth + '×' + window.innerHeight) + ' dpr=' + (window.devicePixelRatio || 1),
+            errLine(),
+            'video: intrinsic ' + v.videoWidth + '×' + v.videoHeight + ' | readyState=' + v.readyState + ' networkState=' + v.networkState + ' paused=' + v.paused,
+            fmtRect(v, 'video'),
+            fmtRect(frame, 'frame'),
+            fmtRect(shell, 'shell'),
+            fmtRect(wrap, 'page-wrap'),
+          ];
+          var text = lines.join('\n');
+          panel.textContent = text;
+          if (window.console && console.debug) console.debug('[video-debug]', text);
+        }
+        tick();
+        setInterval(tick, 500);
+        ['loadedmetadata', 'loadeddata', 'canplay', 'playing', 'resize'].forEach(function (ev) {
+          if (ev === 'resize') window.addEventListener('resize', tick);
+          else v.addEventListener(ev, tick);
+        });
+      } catch (ignore) {}
     })();
   </script>
 </body>
