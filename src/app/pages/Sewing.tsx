@@ -39,7 +39,7 @@ export default function Sewing() {
 
   // Load played weeks from localStorage on mount
   useEffect(() => {
-    const saved = localStorage.getItem('sewing-played-weeks-v3');
+    const saved = localStorage.getItem('sewing-played-weeks-v4');
     if (saved) {
       setPlayedWeeks(new Set(JSON.parse(saved)));
     }
@@ -48,7 +48,7 @@ export default function Sewing() {
   const handlePlayClick = (weekNumber: number) => {
     const newPlayedWeeks = new Set(playedWeeks).add(weekNumber);
     setPlayedWeeks(newPlayedWeeks);
-    localStorage.setItem('sewing-played-weeks-v3', JSON.stringify(Array.from(newPlayedWeeks)));
+    localStorage.setItem('sewing-played-weeks-v4', JSON.stringify(Array.from(newPlayedWeeks)));
     window.location.assign(`/sewing-video.html?week=${encodeURIComponent(String(weekNumber))}`);
   };
 
