@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="view-transition" content="same-origin" />
+  <title>Reading — Hobby Helper</title>
+  <link rel="stylesheet" href="page-transitions.css" />
+  <style>
+    @font-face {
+      font-family: 'Icebox_Trial:Magnet';
+      src: local('Icebox Trial Magnet'), local('IceboxTrial-Magnet'),
+           url('fonts/Icebox%20Trial/webfonts/Icebox-Magnet-Trial.woff2') format('woff2'),
+           url('fonts/Icebox%20Trial/Icebox-Magnet-Trial.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Icebox_Trial:Bold';
+      src: local('Icebox Trial Bold'), local('IceboxTrial-Bold'),
+           url('fonts/Icebox%20Trial/webfonts/Icebox-Bold-Trial.woff2') format('woff2'),
+           url('fonts/Icebox%20Trial/Icebox-Bold-Trial.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Carp_VF_Trial:Regular';
+      src: local('Carp VF Trial Regular'), local('CarpVF_Trial-Regular'),
+           url('fonts/Carp%20Trial/webfonts/Carp-Regular-Trial.woff2') format('woff2'),
+           url('fonts/Carp%20Trial/Carp-Regular-Trial.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Carp_VF_Trial:Italic';
+      src: local('Carp VF Trial Italic'), local('CarpVF_Trial-Italic'),
+           url('fonts/Carp%20Trial/webfonts/Carp-RegularItalic-Trial.woff2') format('woff2'),
+           url('fonts/Carp%20Trial/Carp-RegularItalic-Trial.otf') format('opentype');
+      font-weight: 400;
+      font-style: italic;
+      font-display: swap;
+    }
+
+    * { box-sizing: border-box; }
+    html {
+      background-color: #e8bdd0;
+    }
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      background: #e8bdd0;
+      font-family: 'Carp_VF_Trial:Regular', system-ui, sans-serif;
+    }
+
+    .page-wrap {
+      min-height: 100dvh;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #e8bdd0;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 430px;
+      height: min(100dvh, 932px);
+      background: #fff;
+      position: relative;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    @media (max-width: 767px) {
+      body {
+        overflow: hidden;
+      }
+      .page-wrap {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        min-height: 0;
+        padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
+          env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+        box-sizing: border-box;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        overflow: hidden;
+      }
+      .shell {
+        flex: 1 1 auto;
+        min-height: 0;
+        width: 100%;
+        max-width: 430px;
+        height: auto !important;
+        margin: 0 auto;
+        -webkit-overflow-scrolling: touch;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .page-wrap {
+        background: linear-gradient(to bottom, #f5d8e8, #deb6ce);
+        padding: 1.5rem 1rem;
+      }
+      .shell {
+        height: min(932px, calc(100dvh - 3rem));
+        border-radius: 2.75rem;
+        box-shadow:
+          0 25px 80px -20px rgba(0, 0, 0, 0.35),
+          0 0 0 1px rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    .frame {
+      position: relative;
+      width: 100%;
+      max-width: 430px;
+      margin: 0 auto;
+      min-height: 932px;
+      height: 100%;
+    }
+
+    .bg-tint {
+      position: absolute; inset: 0; background: #b7f3ba; opacity: 0.2;
+      box-shadow: inset 0 0 35px -10px rgba(0,0,0,0.1); pointer-events: none;
+    }
+    .header-bar {
+      position: absolute; left: 0; top: 0; width: 100%; height: 177px; background: #7bbf60;
+      border-radius: 0 0 55px 55px;
+      box-shadow: inset 0 5px 15px 10px rgba(0,0,0,0.1); pointer-events: none;
+    }
+    .title {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 70px;
+      margin: 0;
+      font-family: 'Icebox_Trial:Magnet', ui-sans-serif, system-ui, sans-serif;
+      font-size: 72px;
+      line-height: 1;
+      color: #1d6324;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .card-bg {
+      position: absolute; width: 324px; height: 116px; background: #499e3c; border-radius: 25px;
+      box-shadow: -5px 5px 3px rgba(0,0,0,0.23), -2px 2px 2px rgba(0,0,0,0.14);
+    }
+    .card-bg.r1 { left: -38px; top: 229px; transform: rotate(-2deg); }
+    .card-bg.r2 { left: -36px; top: 383px; transform: none; }
+    .card-bg.r3 { left: -38px; top: 525px; transform: rotate(2deg); }
+    .card-bg.r4 { left: -38px; top: 673px; transform: rotate(-2deg); }
+
+    .play-btn {
+      width: 108px;
+      height: 108px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      overflow: visible;
+    }
+    .play-btn svg {
+      width: 50px;
+      height: 45px;
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    .play-1 { position: absolute; top: 239px; right: 3px; }
+    .play-wrap-2 { position: absolute; top: 387px; right: 3px; transform: rotate(5deg); }
+    .play-3 { position: absolute; top: 535px; right: 3px; }
+    .play-wrap-4 { position: absolute; top: 683px; right: 3px; transform: rotate(-6deg); }
+
+    .week-label {
+      font-family: 'Icebox_Trial:Magnet', ui-sans-serif, system-ui, sans-serif; font-size: 32px; color: #f1fdf1; margin: 0; white-space: nowrap;
+    }
+    .week-desc {
+      font-family: 'Carp_VF_Trial:Regular', system-ui, sans-serif; font-size: 20px; line-height: 1.25; color: #f1fdf1;
+      margin: 0; max-width: 245px; font-variation-settings: 'wdth' 100;
+    }
+    .week-desc em {
+      font-family: 'Carp_VF_Trial:Italic', italic, system-ui, sans-serif;
+      font-style: italic;
+    }
+
+    .w1-label { position: absolute; left: 18px; top: 248px; transform: rotate(-2deg); }
+    .w1-desc { position: absolute; left: 19px; top: 284px; transform: rotate(-2deg); }
+    .w2-label { position: absolute; left: 19px; top: 396px; }
+    .w2-desc { position: absolute; left: 20px; top: 435px; }
+    .w3-label { position: absolute; left: 18px; top: 540px; transform: rotate(2deg); }
+    .w3-desc { position: absolute; left: 19px; top: 579px; transform: rotate(2deg); }
+    .w4-label { position: absolute; left: 18px; top: 689px; transform: rotate(-2deg); }
+    .w4-desc { position: absolute; left: 18px; top: 726px; transform: rotate(-2deg); }
+
+    .side-panel {
+      position: absolute; left: 313px; width: 261px; height: 116px; background: #91d77f; border-radius: 25px;
+      pointer-events: none;
+    }
+    .side-panel.p1 { top: 235px; }
+    .side-panel.p2 { top: 383px; }
+    .side-panel.p3 { top: 531px; }
+    .side-panel.p4 { top: 679px; }
+
+    .nav-track {
+      position: absolute; left: 43px; top: 852px; width: 344px; height: 42px;
+      background: #91d77f; border-radius: 25px; pointer-events: none;
+    }
+    .nav a, .nav .nav-active {
+      position: absolute; top: 852px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 25px;
+    }
+    .nav a {
+      text-decoration: none; font-family: 'Icebox_Trial:Magnet', ui-sans-serif, system-ui, sans-serif; font-size: 24px; color: #1d6324; cursor: pointer; z-index: 2;
+    }
+    .nav a:hover { opacity: 0.88; }
+    .nav .nav-active {
+      background: #7bbf60; box-shadow: inset 0 0 7px 0 rgba(0,0,0,0.25);
+      font-family: 'Icebox_Trial:Bold', ui-sans-serif, system-ui, sans-serif; font-size: 24px; color: #1d6324; z-index: 1; pointer-events: none;
+    }
+    .nav .slot-1 { left: 43px; width: 57px; background: #91d77f; }
+    .nav .slot-2 { left: 100px; width: 57px; background: #91d77f; }
+    .nav .slot-h { left: 157px; width: 116px; background: #91d77f; }
+    .nav .slot-3 { left: 273px; width: 57px; background: #91d77f; }
+    .nav .slot-4.nav-active { left: 330px; width: 57px; }
+  </style>
+</head>
+<body>
+  <script src="reload-to-index.js"></script>
+  <div class="page-wrap">
+  <div class="shell">
+    <div class="frame">
+      <svg class="play-filter-defs" width="0" height="0" aria-hidden="true" focusable="false">
+        <defs>
+          <filter id="readPlayDeboss" x="-100%" y="-100%" width="300%" height="300%" color-interpolation-filters="sRGB">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="2.35" result="blur"/>
+            <feOffset in="blur" dx="7.7" dy="5.6" result="offsetBlur"/>
+            <feComposite in="SourceAlpha" in2="offsetBlur" operator="out" result="inverse"/>
+            <feFlood flood-color="#2f5c2a" flood-opacity="0.30" result="shadowColor"/>
+            <feComposite in="shadowColor" in2="inverse" operator="in" result="innerShadow"/>
+            <feMerge>
+              <feMergeNode in="SourceGraphic"/>
+              <feMergeNode in="innerShadow"/>
+            </feMerge>
+          </filter>
+          <filter id="readCheckDeboss" x="-100%" y="-100%" width="300%" height="300%" color-interpolation-filters="sRGB">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="2.35" result="blur"/>
+            <feOffset in="blur" dx="-5.6" dy="7.7" result="offsetBlur"/>
+            <feComposite in="SourceAlpha" in2="offsetBlur" operator="out" result="inverse"/>
+            <feFlood flood-color="#2f5c2a" flood-opacity="0.30" result="shadowColor"/>
+            <feComposite in="shadowColor" in2="inverse" operator="in" result="innerShadow"/>
+            <feMerge>
+              <feMergeNode in="SourceGraphic"/>
+              <feMergeNode in="innerShadow"/>
+            </feMerge>
+          </filter>
+        </defs>
+      </svg>
+      <div class="bg-tint" aria-hidden="true"></div>
+      <div class="header-bar" aria-hidden="true"></div>
+      <h1 class="title">READING</h1>
+
+      <div class="card-bg r1" aria-hidden="true"></div>
+      <div class="card-bg r4" aria-hidden="true"></div>
+      <div class="card-bg r2" aria-hidden="true"></div>
+      <div class="card-bg r3" aria-hidden="true"></div>
+
+      <div class="side-panel p1" aria-hidden="true"></div>
+      <div class="side-panel p2" aria-hidden="true"></div>
+      <div class="side-panel p3" aria-hidden="true"></div>
+      <div class="side-panel p4" aria-hidden="true"></div>
+
+      <p class="week-label w1-label">WEEK ONE</p>
+      <p class="week-desc w1-desc">Buy and start <em>All Quiet on the Western Front</em>.</p>
+
+      <p class="week-label w2-label">WEEK TWO</p>
+      <p class="week-desc w2-desc">Get about half way through the book.</p>
+
+      <p class="week-label w3-label">WEEK THREE</p>
+      <p class="week-desc w3-desc">Continue reading until almost finished.</p>
+
+      <p class="week-label w4-label">WEEK FOUR</p>
+      <p class="week-desc w4-desc">Finish book and do research about contents.</p>
+
+      <button type="button" class="play-btn play-1" aria-label="Play week one">
+        <svg viewBox="0 0 57.5931 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" overflow="visible">
+          <g transform="rotate(90 28.79655 26)" filter="url(#readPlayDeboss)">
+            <path d="M21.8683 4C24.9475 -1.33333 32.6455 -1.33334 35.7247 4L56.5094 40C59.5886 45.3333 55.7396 52 49.5812 52H8.01194C1.85354 52 -1.99547 45.3333 1.08373 40L21.8683 4Z" fill="#499e3c"/>
+          </g>
+        </svg>
+      </button>
+      <div class="play-wrap-2">
+        <button type="button" class="play-btn" aria-label="Play week two">
+          <svg viewBox="0 0 57.5931 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" overflow="visible">
+            <g transform="rotate(90 28.79655 26)" filter="url(#readPlayDeboss)">
+              <path d="M21.8683 4C24.9475 -1.33333 32.6455 -1.33334 35.7247 4L56.5094 40C59.5886 45.3333 55.7396 52 49.5812 52H8.01194C1.85354 52 -1.99547 45.3333 1.08373 40L21.8683 4Z" fill="#499e3c"/>
+            </g>
+          </svg>
+        </button>
+      </div>
+      <button type="button" class="play-btn play-3" aria-label="Play week three">
+        <svg viewBox="0 0 57.5931 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" overflow="visible">
+          <g transform="rotate(90 28.79655 26)" filter="url(#readPlayDeboss)">
+            <path d="M21.8683 4C24.9475 -1.33333 32.6455 -1.33334 35.7247 4L56.5094 40C59.5886 45.3333 55.7396 52 49.5812 52H8.01194C1.85354 52 -1.99547 45.3333 1.08373 40L21.8683 4Z" fill="#499e3c"/>
+          </g>
+        </svg>
+      </button>
+      <div class="play-wrap-4">
+        <button type="button" class="play-btn" aria-label="Play week four">
+          <svg viewBox="0 0 57.5931 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" overflow="visible">
+            <g transform="rotate(90 28.79655 26)" filter="url(#readPlayDeboss)">
+              <path d="M21.8683 4C24.9475 -1.33333 32.6455 -1.33334 35.7247 4L56.5094 40C59.5886 45.3333 55.7396 52 49.5812 52H8.01194C1.85354 52 -1.99547 45.3333 1.08373 40L21.8683 4Z" fill="#499e3c"/>
+            </g>
+          </svg>
+        </button>
+      </div>
+
+      <div class="nav-track" aria-hidden="true"></div>
+      <nav class="nav" aria-label="Hobby sections">
+        <a class="slot-1" href="/sewing.html">1</a>
+        <a class="slot-2" href="/car-repair.html">2</a>
+        <a class="slot-h" href="hobbies.html">Hobbies</a>
+        <a class="slot-3" href="/games.html">3</a>
+        <span class="slot-4 nav-active">4</span>
+      </nav>
+    </div>
+  </div>
+  </div>
+  <script>
+    (function () {
+      var KEY = 'reading-played-weeks-v2';
+      var VIDEO_PAGE = '/reading-video.html';
+      var PLAY_FILTER = 'readPlayDeboss';
+      var CHECK_FILTER = 'readCheckDeboss';
+      var FILL = '#499e3c';
+      var PLAY_HTML =
+        '<svg viewBox="0 0 57.5931 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" overflow="visible">' +
+        '<g transform="rotate(90 28.79655 26)" filter="url(#' + PLAY_FILTER + ')">' +
+        '<path d="M21.8683 4C24.9475 -1.33333 32.6455 -1.33334 35.7247 4L56.5094 40C59.5886 45.3333 55.7396 52 49.5812 52H8.01194C1.85354 52 -1.99547 45.3333 1.08373 40L21.8683 4Z" fill="' + FILL + '"/>' +
+        '</g></svg>';
+      var CHECK_HTML =
+        '<svg viewBox="-3 -3 62 58" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" overflow="visible">' +
+        '<g filter="url(#' + CHECK_FILTER + ')">' +
+        '<g transform="translate(28 26) scale(1.52) translate(-28 -26)">' +
+        '<path d="M 11.5 28.5 L 23 40 L 45 11" fill="none" stroke="' + FILL + '" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '</g></g></svg>';
+
+      function loadPlayed() {
+        try {
+          var raw = localStorage.getItem(KEY);
+          if (!raw) return new Set();
+          var arr = JSON.parse(raw);
+          return new Set(Array.isArray(arr) ? arr : []);
+        } catch (e) {
+          return new Set();
+        }
+      }
+      function savePlayed(set) {
+        localStorage.setItem(KEY, JSON.stringify(Array.from(set)));
+      }
+      function apply(btn, week, played) {
+        btn.innerHTML = played.has(week) ? CHECK_HTML : PLAY_HTML;
+      }
+      function bind(btn, week) {
+        if (!btn) return;
+        var played = loadPlayed();
+        apply(btn, week, played);
+        btn.addEventListener('click', function () {
+          var next = loadPlayed();
+          next.add(week);
+          savePlayed(next);
+          window.location.assign(VIDEO_PAGE + '?week=' + encodeURIComponent(week));
+        });
+      }
+      bind(document.querySelector('.play-btn.play-1'), 1);
+      bind(document.querySelector('.play-wrap-2 .play-btn'), 2);
+      bind(document.querySelector('.play-btn.play-3'), 3);
+      bind(document.querySelector('.play-wrap-4 .play-btn'), 4);
+    })();
+  </script>
+</body>
+</html>
