@@ -47,34 +47,47 @@
       flex-direction: column;
     }
     @media (max-width: 767px) {
-      body {
+      /*
+        .frame only contains position:absolute children → no in-flow height.
+        A flex .shell with only that child collapses to 0 height on mobile → black video.
+        Use a height % chain + absolute fill so the video always has a real box.
+      */
+      html {
+        height: 100%;
         overflow: hidden;
+      }
+      body {
+        height: 100%;
+        max-height: 100%;
+        overflow: hidden;
+        overscroll-behavior: none;
       }
       .page-wrap {
         position: fixed;
         inset: 0;
         z-index: 0;
-        min-height: 0;
         padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
           env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
         box-sizing: border-box;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
         overflow: hidden;
-      }
-      /* Shell must get a definite height: .frame has only abs-positioned kids (no in-flow height). */
-      .shell {
-        flex: 1 1 0;
+        display: block;
         min-height: 0;
+      }
+      .shell {
+        display: block;
+        height: 100%;
         width: 100%;
         max-width: 430px;
         margin: 0 auto;
-        align-self: stretch;
-        -webkit-overflow-scrolling: touch;
+        overflow: hidden;
       }
       .frame {
-        flex: 1 1 0;
+        position: absolute;
+        inset: 0;
+        flex: none;
+        width: auto;
+        max-width: none;
+        margin: 0;
         min-height: 0;
       }
     }
@@ -170,6 +183,10 @@
       var v = document.getElementById('games-video-el');
       if (!v) return;
       v.muted = true;
+      v.defaultMuted = true;
+      v.playsInline = true;
+      v.setAttribute('playsinline', '');
+      v.setAttribute('webkit-playsinline', '');
       function tryPlay() {
         var p = v.play();
         if (p && typeof p.catch === 'function') {
