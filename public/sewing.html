@@ -397,6 +397,7 @@
       var KEY = 'sewing-played-weeks-v2';
       var VIDEO_SRC = '/sewing.mp4';
       var CLOSE_STROKE = '#e8c547';
+      var FALLBACK_VIDEO_PAGE = '/sewing-video.html';
       var PLAY_HTML =
         '<svg viewBox="0 0 57.5931 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" overflow="visible">' +
         '<g transform="rotate(90 28.79655 26)" filter="url(#sewingPlayDeboss)">' +
@@ -433,7 +434,20 @@
           var next = loadPlayed();
           next.add(week);
           savePlayed(next);
-          openHobbyVideoEmbed({ src: VIDEO_SRC, closeStroke: CLOSE_STROKE });
+          apply(btn, week, next);
+          try {
+            if (typeof openHobbyVideoEmbed === 'function') {
+              openHobbyVideoEmbed({ src: VIDEO_SRC, closeStroke: CLOSE_STROKE });
+            } else {
+              window.location.assign(
+                FALLBACK_VIDEO_PAGE + '?week=' + encodeURIComponent(week)
+              );
+            }
+          } catch (err) {
+            window.location.assign(
+              FALLBACK_VIDEO_PAGE + '?week=' + encodeURIComponent(week)
+            );
+          }
         });
       }
       bind(document.querySelector('.play-btn.play-1'), 1);
