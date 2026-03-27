@@ -299,6 +299,12 @@
           apply();
           setTimeout(apply, 100);
         });
+        v.addEventListener('loadedmetadata', function () {
+          requestAnimationFrame(apply);
+        });
+        v.addEventListener('loadeddata', function () {
+          requestAnimationFrame(apply);
+        });
       })();
 
       /* ?debug=1 — layout + playback diagnostics (Safari / phone black-screen) */
