@@ -11,6 +11,10 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  server: {
+    // Phones on the same Wi‑Fi can open http://<your-lan-ip>:5173/… (not localhost).
+    host: true,
+  },
   build: {
     rollupOptions: {
       input: {
