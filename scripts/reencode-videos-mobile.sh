@@ -16,11 +16,13 @@
 #   ./scripts/reencode-videos-mobile.sh --main     # same as default (explicit)
 #   ./scripts/reencode-videos-mobile.sh --baseline # Baseline profile, level 3.1
 #   ./scripts/reencode-videos-mobile.sh --dry-run  # print ffmpeg commands only
+#
+# Input/output: public/*.mp4 (same folder as *-video.html pages; not public/videos/).
 
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-VID="${ROOT}/public/videos"
+VID="${ROOT}/public"
 DRY=0
 PROFILE="main"
 LEVEL="4.0"

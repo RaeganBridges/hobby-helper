@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Print H.264 codec profile / level for each MP4 under public/videos (excludes *.original.mp4).
+# Print H.264 codec profile / level for each MP4 under public/ (excludes *.original.mp4).
 # Expect Baseline or Main for mobile-friendly assets (not High / High 10).
 #
 # Requires: ffprobe (from ffmpeg: brew install ffmpeg)
@@ -7,7 +7,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-VID="${ROOT}/public/videos"
+VID="${ROOT}/public"
 
 if ! command -v ffprobe >/dev/null 2>&1; then
   echo "ffprobe not found. Install ffmpeg (e.g. brew install ffmpeg)." >&2
