@@ -195,7 +195,7 @@
     <div class="frame">
       <video
         id="car-video-el"
-        src="car-repair.mp4"
+        src="/car-repair.mp4"
         autoplay
         loop
         muted
@@ -219,19 +219,13 @@
       var isIOS =
         /iPad|iPhone|iPod/.test(navigator.userAgent) ||
         (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      /* iOS: small seek after metadata. Do NOT append #t= to src — breaks Range/CDN + Safari. */
       if (isIOS) {
-        var u = v.getAttribute('src') || '';
-        if (u && u.indexOf('#') === -1) {
-          v.src = u + '#t=0.001';
-          try {
-            v.load();
-          } catch (eLoad) {}
-        }
         v.addEventListener(
           'loadedmetadata',
           function () {
             try {
-              if (v.readyState >= 1) v.currentTime = 0.001;
+              if (v.readyState >= 1) v.currentTime = 0.05;
             } catch (eT) {}
           },
           { once: true }

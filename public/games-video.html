@@ -195,7 +195,7 @@
     <div class="frame">
       <video
         id="games-video-el"
-        src="games.mp4"
+        src="/games.mp4"
         autoplay
         loop
         muted
@@ -219,20 +219,13 @@
       var isIOS =
         /iPad|iPhone|iPod/.test(navigator.userAgent) ||
         (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-      /* iOS Safari: media fragment + seek nudge — fixes many “black until seek” decoder stalls */
+      /* iOS: small seek after metadata (black first frame). Do NOT append #t= to src — breaks Range/CDN + Safari. */
       if (isIOS) {
-        var u = v.getAttribute('src') || '';
-        if (u && u.indexOf('#') === -1) {
-          v.src = u + '#t=0.001';
-          try {
-            v.load();
-          } catch (eLoad) {}
-        }
         v.addEventListener(
           'loadedmetadata',
           function () {
             try {
-              if (v.readyState >= 1) v.currentTime = 0.001;
+              if (v.readyState >= 1) v.currentTime = 0.05;
             } catch (eT) {}
           },
           { once: true }
