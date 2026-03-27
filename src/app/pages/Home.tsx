@@ -1,21 +1,19 @@
 import imgLogo1 from "figma:asset/89b09710aad68d4400b9fc8c7058b8276103e194.png";
 import { motion } from 'motion/react';
 
-function HobbyCard({ 
-  title, 
-  description, 
-  rotation, 
-  onClick 
-}: { 
-  title: string; 
-  description: string; 
-  rotation: string;
+function HobbyCard({
+  title,
+  description,
+  onClick,
+}: {
+  title: string;
+  description: string;
   onClick: () => void;
 }) {
   return (
-    <button 
+    <button
       onClick={onClick}
-      className={`block cursor-pointer w-full ${rotation}`}
+      className="block cursor-pointer w-full"
     >
       <div className="bg-[#e45b8b] h-[116px] rounded-[25px] py-3 text-left w-full hover:bg-[#d84e7e] transition-colors relative" style={{ boxShadow: '-4px 4px 6px rgba(0, 0, 0, 0.3)' }}>
         <p className="font-icebox-magnet leading-[normal] not-italic text-[32px] text-white whitespace-nowrap mb-1 absolute left-[80px] top-[12px]">
@@ -52,10 +50,9 @@ export default function Home() {
         {/* Hobby Cards */}
         <div className="absolute left-[-61px] top-[242px] w-[562.362px]">
           <div className="rotate-1 mb-6">
-            <HobbyCard 
+            <HobbyCard
               title="SEWING"
               description="Make a new dress for the Delight formal dance."
-              rotation=""
               onClick={() => { window.location.assign('/sewing.html'); }}
             />
           </div>
@@ -63,10 +60,9 @@ export default function Home() {
 
         <div className="absolute left-[-61px] top-[386.86px] w-[575.611px]">
           <div className="-rotate-1 mb-6">
-            <HobbyCard 
+            <HobbyCard
               title="CAR REPAIR"
               description="Fix the door wiring, headliner, and windows in the Bronco."
-              rotation=""
               onClick={() => { window.location.assign('/car-repair.html'); }}
             />
           </div>
@@ -74,10 +70,9 @@ export default function Home() {
 
         <div className="absolute left-[-61px] top-[536.86px] w-[605.932px]">
           <div className="rotate-1 mb-6">
-            <HobbyCard 
+            <HobbyCard
               title="GAMES"
               description="Practice nerds, mahjong, and chess for the next time I am home."
-              rotation=""
               onClick={() => { window.location.assign('/games.html'); }}
             />
           </div>
