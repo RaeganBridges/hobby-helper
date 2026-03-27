@@ -121,9 +121,9 @@
       margin: 0 auto;
       overflow: hidden;
       background: #000;
-      isolation: isolate;
     }
 
+    /* Avoid translateZ/isolation here — they have caused black frames on some iOS WebKit builds. */
     .frame video {
       position: absolute;
       inset: 0;
@@ -132,8 +132,6 @@
       height: 100%;
       object-fit: cover;
       object-position: center;
-      -webkit-transform: translateZ(0);
-      transform: translateZ(0);
     }
 
     .video-close {
@@ -236,6 +234,51 @@
       v.addEventListener('error', function () {
         v.setAttribute('controls', '');
       });
+
+      /* Mobile: force shell/frame height in px — flex/% chains still fail on some iOS versions. */
+      (function mobileVideoLayout() {
+        var wrap = document.querySelector('.page-wrap');
+        var shell = document.querySelector('.shell');
+        var frame = document.querySelector('.frame');
+        if (!wrap || !shell || !frame) return;
+        function apply() {
+          if (window.matchMedia('(min-width: 768px)').matches) {
+            shell.style.removeProperty('height');
+            shell.style.removeProperty('min-height');
+            shell.style.removeProperty('max-height');
+            frame.style.removeProperty('height');
+            frame.style.removeProperty('min-height');
+            return;
+          }
+          var h = wrap.getBoundingClientRect().height;
+          if (h < 2) h = window.innerHeight;
+          shell.style.boxSizing = 'border-box';
+          shell.style.height = h + 'px';
+          shell.style.minHeight = h + 'px';
+          shell.style.maxHeight = h + 'px';
+          frame.style.height = h + 'px';
+          frame.style.minHeight = h + 'px';
+          try {
+            var playP = v.play();
+            if (playP && typeof playP.catch === 'function') playP.catch(function () {});
+          } catch (ePlay) {}
+        }
+        apply();
+        window.addEventListener('resize', apply);
+        window.addEventListener('orientationchange', function () {
+          setTimeout(apply, 350);
+        });
+        if (window.visualViewport) {
+          window.visualViewport.addEventListener('resize', apply);
+        }
+        document.addEventListener('visibilitychange', function () {
+          if (!document.hidden) setTimeout(apply, 50);
+        });
+        requestAnimationFrame(function () {
+          apply();
+          setTimeout(apply, 100);
+        });
+      })();
 
       /* ?debug=1 — layout + playback diagnostics (Safari / phone black-screen) */
       try {
