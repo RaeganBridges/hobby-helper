@@ -7,12 +7,15 @@
 #   - Video: H.264 (x264), Main or Baseline profile, Level 4.0 (or 3.1 for older devices)
 #   - Audio: AAC
 #
+# Codec policy: H.264 only, Baseline or Main profile (never High). yuv420p for pixel format.
+#
 # CLI (this repo): requires ffmpeg (e.g. macOS: brew install ffmpeg)
 #
 # Usage:
-#   ./scripts/reencode-videos-mobile.sh           # encode all *.mp4 in public/videos
-#   ./scripts/reencode-videos-mobile.sh --dry-run # print commands only
-#   ./scripts/reencode-videos-mobile.sh --baseline # widest old-device compatibility (slightly larger files)
+#   ./scripts/reencode-videos-mobile.sh            # Main profile, level 4.0 (default)
+#   ./scripts/reencode-videos-mobile.sh --main     # same as default (explicit)
+#   ./scripts/reencode-videos-mobile.sh --baseline # Baseline profile, level 3.1
+#   ./scripts/reencode-videos-mobile.sh --dry-run  # print ffmpeg commands only
 
 set -euo pipefail
 
@@ -25,12 +28,16 @@ LEVEL="4.0"
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --dry-run) DRY=1 ;;
+    --main)
+      PROFILE="main"
+      LEVEL="4.0"
+      ;;
     --baseline)
       PROFILE="baseline"
       LEVEL="3.1"
       ;;
     -h|--help)
-      sed -n '1,25p' "$0"
+      sed -n '1,30p' "$0"
       exit 0
       ;;
     *)
@@ -71,14 +78,14 @@ for infile in "${FILES[@]}"; do
     continue
   fi
 
-  # H.264 Main/Baseline + yuv420p + faststart (moov before mdat) mirrors "web optimized" / mobile-friendly exports.
+  # libx264 honors -profile:v main|baseline (not high). -pix_fmt yuv420p matches Baseline/Main tier-1.
   cmd=(
     ffmpeg -hide_banner -y
     -i "$infile"
     -map_metadata -1
     -c:v libx264
     -profile:v "$PROFILE"
-    -level "$LEVEL"
+    -level:v "$LEVEL"
     -pix_fmt yuv420p
     -crf 23
     -preset medium
