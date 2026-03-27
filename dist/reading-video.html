@@ -195,7 +195,6 @@
     <div class="frame">
       <video
         id="reading-video-el"
-        src="/book.mp4"
         autoplay
         loop
         muted
@@ -203,7 +202,10 @@
         webkit-playsinline
         preload="auto"
         aria-label="Reading week video"
-      ></video>
+      >
+        <!-- Web-optimized MP4: H.264 + AAC (see scripts/reencode-videos-mobile.sh) -->
+        <source src="/book.mp4" type="video/mp4" />
+      </video>
       <a class="video-close" href="reading.html" aria-label="Close video">
         <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" overflow="visible">
           <path d="M 10 10 L 46 46 M 46 10 L 10 46" fill="none" stroke="#3f8a33" stroke-width="11" stroke-linecap="round"/>
