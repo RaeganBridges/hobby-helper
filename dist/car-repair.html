@@ -230,6 +230,7 @@
     .nav .slot-3 { left: 273px; width: 57px; background: #b6cfff; }
     .nav .slot-4 { left: 330px; width: 57px; background: #b6cfff; }
   </style>
+  <link rel="stylesheet" href="video-embed.css" />
 </head>
 <body>
   <script src="reload-to-index.js"></script>
@@ -332,10 +333,12 @@
     </div>
   </div>
   </div>
+  <script src="video-embed.js"></script>
   <script>
     (function () {
       var KEY = 'car-repair-played-weeks-v2';
-      var VIDEO_PAGE = '/car-repair-video.html';
+      var VIDEO_SRC = '/car-repair.mp4';
+      var CLOSE_STROKE = '#7fa0d6';
       var PLAY_FILTER = 'carPlayDeboss';
       var CHECK_FILTER = 'carCheckDeboss';
       var FILL = '#7fa0d6';
@@ -375,7 +378,7 @@
           var next = loadPlayed();
           next.add(week);
           savePlayed(next);
-          window.location.assign(VIDEO_PAGE + '?week=' + encodeURIComponent(week));
+          openHobbyVideoEmbed({ src: VIDEO_SRC, closeStroke: CLOSE_STROKE });
         });
       }
       bind(document.querySelector('.play-btn.play-1'), 1);

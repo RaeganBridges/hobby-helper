@@ -287,6 +287,7 @@
     .nav .slot-3 { left: 273px; width: 57px; background: #ffdc69; }
     .nav .slot-4 { left: 330px; width: 57px; background: #ffdc69; }
   </style>
+  <link rel="stylesheet" href="video-embed.css" />
 </head>
 <body>
   <script src="reload-to-index.js"></script>
@@ -390,10 +391,12 @@
     </div>
   </div>
   </div>
+  <script src="video-embed.js"></script>
   <script>
     (function () {
       var KEY = 'sewing-played-weeks-v2';
-      var VIDEO_PAGE = '/sewing-video.html';
+      var VIDEO_SRC = '/sewing.mp4';
+      var CLOSE_STROKE = '#e8c547';
       var PLAY_HTML =
         '<svg viewBox="0 0 57.5931 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" overflow="visible">' +
         '<g transform="rotate(90 28.79655 26)" filter="url(#sewingPlayDeboss)">' +
@@ -430,7 +433,7 @@
           var next = loadPlayed();
           next.add(week);
           savePlayed(next);
-          window.location.assign(VIDEO_PAGE + '?week=' + encodeURIComponent(week));
+          openHobbyVideoEmbed({ src: VIDEO_SRC, closeStroke: CLOSE_STROKE });
         });
       }
       bind(document.querySelector('.play-btn.play-1'), 1);

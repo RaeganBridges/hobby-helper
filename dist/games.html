@@ -229,6 +229,7 @@
     .nav .slot-3.nav-active { left: 273px; width: 57px; }
     .nav .slot-4 { left: 330px; width: 57px; background: #ff8486; }
   </style>
+  <link rel="stylesheet" href="video-embed.css" />
 </head>
 <body>
   <script src="reload-to-index.js"></script>
@@ -331,10 +332,12 @@
     </div>
   </div>
   </div>
+  <script src="video-embed.js"></script>
   <script>
     (function () {
       var KEY = 'games-played-weeks-v2';
-      var VIDEO_PAGE = '/games-video.html';
+      var VIDEO_SRC = '/games.mp4';
+      var CLOSE_STROKE = '#dd3d4d';
       var PLAY_FILTER = 'gamesPlayDeboss';
       var CHECK_FILTER = 'gamesCheckDeboss';
       var FILL = '#dd3d4d';
@@ -374,7 +377,7 @@
           var next = loadPlayed();
           next.add(week);
           savePlayed(next);
-          window.location.assign(VIDEO_PAGE + '?week=' + encodeURIComponent(week));
+          openHobbyVideoEmbed({ src: VIDEO_SRC, closeStroke: CLOSE_STROKE });
         });
       }
       bind(document.querySelector('.play-btn.play-1'), 1);

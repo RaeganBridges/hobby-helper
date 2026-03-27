@@ -233,6 +233,7 @@
     .nav .slot-3 { left: 273px; width: 57px; background: #91d77f; }
     .nav .slot-4.nav-active { left: 330px; width: 57px; }
   </style>
+  <link rel="stylesheet" href="video-embed.css" />
 </head>
 <body>
   <script src="reload-to-index.js"></script>
@@ -378,7 +379,7 @@
           var next = loadPlayed();
           next.add(week);
           savePlayed(next);
-          window.location.assign(VIDEO_PAGE + '?week=' + encodeURIComponent(week));
+          openHobbyVideoEmbed({ src: VIDEO_SRC, closeStroke: CLOSE_STROKE });
         });
       }
       bind(document.querySelector('.play-btn.play-1'), 1);
