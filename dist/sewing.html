@@ -395,7 +395,10 @@
   <script>
     (function () {
       var KEY = 'sewing-played-weeks-v4';
-      var VIDEO_SRC = '/videos/sewing.mp4';
+      var VIDEO_DEFAULT = '/videos/sewing.mp4';
+      var VIDEO_WEEK_TWO = '/videos/sewing-week2.mp4';
+      var VIDEO_WEEK_THREE = '/videos/sewing-week3.mp4';
+      var VIDEO_WEEK_FOUR = '/videos/sewing-week4.mp4';
       var CLOSE_STROKE = '#e8c547';
       var FALLBACK_VIDEO_PAGE = '/sewing-video.html';
       var PLAY_HTML =
@@ -426,6 +429,12 @@
       function apply(btn, week, played) {
         btn.innerHTML = played.has(week) ? CHECK_HTML : PLAY_HTML;
       }
+      function videoSrcForWeek(week) {
+        if (week === 2) return VIDEO_WEEK_TWO;
+        if (week === 3) return VIDEO_WEEK_THREE;
+        if (week === 4) return VIDEO_WEEK_FOUR;
+        return VIDEO_DEFAULT;
+      }
       function bind(btn, week) {
         if (!btn) return;
         var played = loadPlayed();
@@ -437,7 +446,7 @@
           apply(btn, week, next);
           try {
             if (typeof openHobbyVideoEmbed === 'function') {
-              openHobbyVideoEmbed({ src: VIDEO_SRC, closeStroke: CLOSE_STROKE });
+              openHobbyVideoEmbed({ src: videoSrcForWeek(week), closeStroke: CLOSE_STROKE });
             } else {
               window.location.assign(
                 FALLBACK_VIDEO_PAGE + '?week=' + encodeURIComponent(week)

@@ -337,7 +337,10 @@
   <script>
     (function () {
       var KEY = 'car-repair-played-weeks-v4';
-      var VIDEO_SRC = '/videos/car-repair.mp4';
+      var VIDEO_DEFAULT = '/videos/car-repair.mp4';
+      var VIDEO_WEEK_TWO = '/videos/car-repair-week2.mp4';
+      var VIDEO_WEEK_THREE = '/videos/car-repair-week3.mp4';
+      var VIDEO_WEEK_FOUR = '/videos/car-repair-week4.mp4';
       var CLOSE_STROKE = '#7fa0d6';
       var FALLBACK_VIDEO_PAGE = '/car-repair-video.html';
       var PLAY_FILTER = 'carPlayDeboss';
@@ -371,6 +374,12 @@
       function apply(btn, week, played) {
         btn.innerHTML = played.has(week) ? CHECK_HTML : PLAY_HTML;
       }
+      function videoSrcForWeek(week) {
+        if (week === 2) return VIDEO_WEEK_TWO;
+        if (week === 3) return VIDEO_WEEK_THREE;
+        if (week === 4) return VIDEO_WEEK_FOUR;
+        return VIDEO_DEFAULT;
+      }
       function bind(btn, week) {
         if (!btn) return;
         var played = loadPlayed();
@@ -382,7 +391,7 @@
           apply(btn, week, next);
           try {
             if (typeof openHobbyVideoEmbed === 'function') {
-              openHobbyVideoEmbed({ src: VIDEO_SRC, closeStroke: CLOSE_STROKE });
+              openHobbyVideoEmbed({ src: videoSrcForWeek(week), closeStroke: CLOSE_STROKE });
             } else {
               window.location.assign(
                 FALLBACK_VIDEO_PAGE + '?week=' + encodeURIComponent(week)

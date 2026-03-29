@@ -204,7 +204,7 @@
         aria-label="Reading week video"
       >
         <!-- Web-optimized MP4: H.264 + AAC (see scripts/reencode-videos-mobile.sh) -->
-        <source src="/videos/book.mp4" type="video/mp4" />
+        <source src="/videos/book.mp4" type="video/mp4" data-week2-src="/videos/reading-week2.mp4" data-week3-src="/videos/reading-week3.mp4" data-week4-src="/videos/reading-week4.mp4" />
       </video>
       <a class="video-close" href="reading.html" aria-label="Close video">
         <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" overflow="visible">
@@ -218,6 +218,22 @@
     (function () {
       var v = document.getElementById('reading-video-el');
       if (!v) return;
+      var weekParam = new URLSearchParams(window.location.search).get('week');
+      var weekNum = weekParam != null ? parseInt(weekParam, 10) : NaN;
+      var srcEl = v.querySelector('source');
+      if (srcEl) {
+        var w2 = srcEl.getAttribute('data-week2-src') || '/videos/reading-week2.mp4';
+        var w3 = srcEl.getAttribute('data-week3-src') || '/videos/reading-week3.mp4';
+        var w4 = srcEl.getAttribute('data-week4-src') || '/videos/reading-week4.mp4';
+        var pick = '/videos/book.mp4';
+        if (weekNum === 2) pick = w2;
+        else if (weekNum === 3) pick = w3;
+        else if (weekNum === 4) pick = w4;
+        srcEl.setAttribute('src', pick);
+        try {
+          v.load();
+        } catch (eLoad) {}
+      }
       var isIOS =
         /iPad|iPhone|iPod/.test(navigator.userAgent) ||
         (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
