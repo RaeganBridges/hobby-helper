@@ -5,9 +5,59 @@
 (function () {
   var root, video, wrap, shell, frame, closeBtn, pathEl;
   var layoutApply = function () {};
+  var hourRaf = null;
   var onKeyDown = function (e) {
     if (e.key === 'Escape') closeHobbyVideoEmbed();
   };
+
+  function stopHourRing() {
+    if (hourRaf != null) {
+      cancelAnimationFrame(hourRaf);
+      hourRaf = null;
+    }
+  }
+
+  function startHourRing(ringColor) {
+    stopHourRing();
+    if (!root) return;
+    var prog = root.querySelector('.hve-hour-progress');
+    if (!prog) return;
+    if (ringColor) prog.setAttribute('stroke', ringColor);
+
+    var HOUR_MS = 60 * 60 * 1000;
+    var c = 2 * Math.PI * 40;
+    var storageKey = 'hh-video-hour-start:hve:' + location.pathname;
+    var now = Date.now();
+    var start;
+    try {
+      var raw = sessionStorage.getItem(storageKey);
+      var parsed = raw ? parseInt(raw, 10) : NaN;
+      if (!isFinite(parsed) || parsed > now) {
+        start = now;
+        sessionStorage.setItem(storageKey, String(start));
+      } else {
+        start = parsed;
+      }
+    } catch (e) {
+      start = now;
+    }
+
+    function tick() {
+      if (!root || !root.classList.contains('hve-visible')) {
+        hourRaf = null;
+        return;
+      }
+      var elapsed = Date.now() - start;
+      var t = Math.min(1, Math.max(0, elapsed / HOUR_MS));
+      prog.setAttribute('stroke-dashoffset', String(c * t));
+      if (t < 1) {
+        hourRaf = requestAnimationFrame(tick);
+      } else {
+        hourRaf = null;
+      }
+    }
+    hourRaf = requestAnimationFrame(tick);
+  }
 
   function tryPlayVideo() {
     if (!video) return;
@@ -39,6 +89,13 @@
       '<video id="hve-video" autoplay loop muted playsinline webkit-playsinline preload="auto" aria-label="Video">' +
       '<source type="video/mp4" />' +
       '</video>' +
+      '<div class="hve-overlay-layer">' +
+      '<div class="hve-hour-ring" aria-hidden="true">' +
+      '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">' +
+      '<circle cx="50" cy="50" r="46" fill="rgba(0,0,0,0.65)"/>' +
+      '<circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="5"/>' +
+      '<circle class="hve-hour-progress" cx="50" cy="50" r="40" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" transform="rotate(-90 50 50)" stroke-dasharray="251.33" stroke-dashoffset="0"/>' +
+      '</svg></div></div>' +
       '<button type="button" class="hve-close" aria-label="Close video">' +
       '<svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" overflow="visible">' +
       '<path class="hve-close-path" d="M 10 10 L 46 46 M 46 10 L 10 46" fill="none" stroke="#ffffff" stroke-width="11" stroke-linecap="round"/>' +
@@ -128,6 +185,9 @@
       pathEl.setAttribute('stroke', opts.closeStroke);
     }
 
+    var ringColor = opts.hourRingColor || opts.closeStroke || '#ffffff';
+    startHourRing(ringColor);
+
     if (!playbackWired) {
       wirePlayback();
       playbackWired = true;
@@ -166,6 +226,7 @@
 
   window.closeHobbyVideoEmbed = function () {
     if (!root) return;
+    stopHourRing();
     try {
       video.pause();
     } catch (e) {}

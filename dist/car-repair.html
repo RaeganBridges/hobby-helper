@@ -6,6 +6,7 @@
   <meta name="view-transition" content="same-origin" />
   <title>Car Repair — Hobby Helper</title>
   <link rel="stylesheet" href="page-transitions.css" />
+  <link rel="stylesheet" href="hobby-flood-reset.css" />
   <style>
     @font-face {
       font-family: 'Icebox_Trial:Magnet';
@@ -265,7 +266,7 @@
       </svg>
       <div class="bg-tint" aria-hidden="true"></div>
       <div class="header-bar" aria-hidden="true"></div>
-      <h1 class="title">CAR REPAIR</h1>
+      <button type="button" class="title" data-hobby-flood-title aria-label="Replay intro and reset week progress for car repair">CAR REPAIR</button>
 
       <div class="card-bg r1" aria-hidden="true"></div>
       <div class="card-bg r4" aria-hidden="true"></div>
@@ -333,6 +334,13 @@
     </div>
   </div>
   </div>
+  <script>
+    window.HOBBY_FLOOD_RESET = {
+      keys: ['car-repair-played-weeks-v4', 'car-repair-played-weeks-v3'],
+      secondSrc: '/images/flood/05-car.png',
+    };
+  </script>
+  <script src="hobby-flood-reset.js"></script>
   <script src="video-embed.js"></script>
   <script>
     (function () {

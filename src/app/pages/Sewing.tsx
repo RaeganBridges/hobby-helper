@@ -1,6 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import svgPaths from "../../imports/svg-b9ct596ajp";
 import { motion } from 'motion/react';
+
+const SEWING_FLOOD_LOGO = '/images/flood/01-logo.png';
+const SEWING_FLOOD_SECOND = '/images/flood/03-sewing.png';
+const SEWING_FLOOD_BLEND_MS = (55 / 60) * 1000;
 
 /** Filled-style check with round caps; uses sewingCheckDeboss (rotated shadow), not play triangles. */
 function SewingPlayedCheck() {
@@ -36,6 +40,10 @@ function SewingPlayedCheck() {
 
 export default function Sewing() {
   const [playedWeeks, setPlayedWeeks] = useState<Set<number>>(new Set());
+  const [floodOpen, setFloodOpen] = useState(false);
+  const [floodBaseSrc, setFloodBaseSrc] = useState(SEWING_FLOOD_LOGO);
+  const [floodOverlayIn, setFloodOverlayIn] = useState(false);
+  const floodRunningRef = useRef(false);
 
   // Load played weeks from localStorage on mount
   useEffect(() => {
@@ -44,6 +52,54 @@ export default function Sewing() {
       setPlayedWeeks(new Set(JSON.parse(saved)));
     }
   }, []);
+
+  useEffect(() => {
+    if (!floodOpen) return;
+
+    setFloodBaseSrc(SEWING_FLOOD_LOGO);
+    setFloodOverlayIn(false);
+
+    const FPS = 60;
+    const firstHold = (60 / FPS) * 1000;
+    const endHold = (20 / FPS) * 1000;
+
+    const t1 = window.setTimeout(() => setFloodOverlayIn(true), firstHold);
+    const t2 = window.setTimeout(() => {
+      setFloodBaseSrc(SEWING_FLOOD_SECOND);
+      setFloodOverlayIn(false);
+    }, firstHold + SEWING_FLOOD_BLEND_MS + 80);
+    const t3 = window.setTimeout(() => {
+      setFloodOpen(false);
+      setFloodBaseSrc(SEWING_FLOOD_LOGO);
+      floodRunningRef.current = false;
+    }, firstHold + SEWING_FLOOD_BLEND_MS + 80 + endHold);
+
+    return () => {
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+      window.clearTimeout(t3);
+    };
+  }, [floodOpen]);
+
+  const handleTitleFloodClick = () => {
+    if (floodRunningRef.current) return;
+    floodRunningRef.current = true;
+    try {
+      localStorage.removeItem('sewing-played-weeks-v4');
+      localStorage.removeItem('sewing-played-weeks-v3');
+    } catch {
+      /* ignore */
+    }
+    setPlayedWeeks(new Set());
+    const reduceMotion =
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) {
+      floodRunningRef.current = false;
+      return;
+    }
+    setFloodOpen(true);
+  };
 
   const handlePlayClick = (weekNumber: number) => {
     const newPlayedWeeks = new Set(playedWeeks).add(weekNumber);
@@ -90,6 +146,7 @@ export default function Sewing() {
   };
 
   return (
+    <>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -163,7 +220,14 @@ export default function Sewing() {
           </div>
           
           {/* Title */}
-          <p className="absolute font-icebox-magnet leading-[normal] left-1/2 -translate-x-1/2 not-italic text-[#8f6922] text-[72px] top-[70px] whitespace-nowrap text-center">SEWING</p>
+          <button
+            type="button"
+            onClick={handleTitleFloodClick}
+            className="absolute font-icebox-magnet leading-[normal] left-1/2 -translate-x-1/2 not-italic text-[#8f6922] text-[72px] top-[70px] whitespace-nowrap text-center cursor-pointer appearance-none bg-transparent border-0 p-0 m-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current"
+            aria-label="Replay intro and reset week progress for sewing"
+          >
+            SEWING
+          </button>
           
           {/* Week One */}
           <div className="absolute flex h-[42.374px] items-center justify-center left-[18.39px] top-[247px] w-[127.249px]" style={{ "--transform-inner-width": "1200", "--transform-inner-height": "19" } as React.CSSProperties}>
@@ -255,5 +319,33 @@ export default function Sewing() {
           </button>
         </div>
       </motion.div>
+
+      {floodOpen ? (
+        <div
+          className="fixed inset-0 z-[99999] box-border flex items-center justify-center bg-[#e8bdd0] pt-[env(safe-area-inset-top,0px)] pr-[env(safe-area-inset-right,0px)] pb-[env(safe-area-inset-bottom,0px)] pl-[env(safe-area-inset-left,0px)] md:bg-gradient-to-b md:from-[#f5d8e8] md:to-[#deb6ce] md:p-6"
+          aria-hidden
+        >
+          <div className="flex h-[min(100dvh,932px)] w-full max-w-[430px] flex-col overflow-hidden bg-[#d6648b] md:h-[min(932px,calc(100dvh-3rem))] md:rounded-[2.75rem] md:shadow-[0_25px_80px_-20px_rgba(0,0,0,0.35),0_0_0_1px_rgba(0,0,0,0.1)]">
+            <div className="relative min-h-0 w-full flex-1 bg-[#d6648b]">
+              <img
+                src={floodBaseSrc}
+                className="pointer-events-none absolute inset-0 z-[1] size-full object-cover select-none"
+                alt=""
+              />
+              <img
+                src={SEWING_FLOOD_SECOND}
+                className={`pointer-events-none absolute inset-0 z-[2] size-full object-cover select-none transition-opacity ${floodOverlayIn ? 'opacity-100' : 'opacity-0'}`}
+                style={{
+                  transitionDuration: `${SEWING_FLOOD_BLEND_MS}ms`,
+                  transitionTimingFunction: 'cubic-bezier(0.22, 0.1, 0.22, 1)',
+                }}
+                alt=""
+                aria-hidden
+              />
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </>
   );
 }

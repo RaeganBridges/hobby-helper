@@ -6,6 +6,7 @@
   <meta name="view-transition" content="same-origin" />
   <title>Games — Hobby Helper</title>
   <link rel="stylesheet" href="page-transitions.css" />
+  <link rel="stylesheet" href="hobby-flood-reset.css" />
   <style>
     @font-face {
       font-family: 'Icebox_Trial:Magnet';
@@ -264,7 +265,7 @@
       </svg>
       <div class="bg-tint" aria-hidden="true"></div>
       <div class="header-bar" aria-hidden="true"></div>
-      <h1 class="title">GAMES</h1>
+      <button type="button" class="title" data-hobby-flood-title aria-label="Replay intro and reset week progress for games">GAMES</button>
 
       <div class="card-bg r1" aria-hidden="true"></div>
       <div class="card-bg r4" aria-hidden="true"></div>
@@ -332,6 +333,13 @@
     </div>
   </div>
   </div>
+  <script>
+    window.HOBBY_FLOOD_RESET = {
+      keys: ['games-played-weeks-v4', 'games-played-weeks-v3'],
+      secondSrc: '/images/flood/02-games.png',
+    };
+  </script>
+  <script src="hobby-flood-reset.js"></script>
   <script src="video-embed.js"></script>
   <script>
     (function () {

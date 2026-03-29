@@ -153,6 +153,23 @@
       width: 366px;
     }
 
+    button.logo-wrap {
+      appearance: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+      background: transparent;
+      cursor: pointer;
+      display: block;
+      text-align: left;
+      font: inherit;
+      color: inherit;
+    }
+    button.logo-wrap:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 4px;
+      border-radius: 4px;
+    }
     .logo-wrap img {
       position: absolute;
       inset: 0;
@@ -298,9 +315,14 @@
         <div class="inset-vignette" aria-hidden="true"></div>
         <div class="header-bar" aria-hidden="true"></div>
 
-        <div class="logo-wrap">
-          <img src="images/hobby-helper-logo.png" alt="Hobby Helper" width="366" height="291" />
-        </div>
+        <button
+          type="button"
+          class="logo-wrap"
+          id="hh-logo-reset-home"
+          aria-label="Hobby Helper — return to start and reset week play buttons"
+        >
+          <img src="images/hobby-helper-logo.png" alt="" width="366" height="291" />
+        </button>
 
         <div class="hobby-slot hobby-slot--1">
           <div class="tilt-1">
@@ -356,5 +378,28 @@
       </div>
     </div>
   </div>
+  <script>
+    (function () {
+      var btn = document.getElementById('hh-logo-reset-home');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        try {
+          [
+            'games-played-weeks-v4',
+            'sewing-played-weeks-v4',
+            'reading-played-weeks-v4',
+            'car-repair-played-weeks-v4',
+            'games-played-weeks-v3',
+            'sewing-played-weeks-v3',
+            'reading-played-weeks-v3',
+            'car-repair-played-weeks-v3',
+          ].forEach(function (k) {
+            localStorage.removeItem(k);
+          });
+        } catch (e) {}
+        window.location.assign('index.html');
+      });
+    })();
+  </script>
 </body>
 </html>

@@ -1,0 +1,31 @@
+/* Full-screen video sits in its own layer; overlays sit above (fixes WebKit video compositing). */
+.frame video {
+  z-index: 0;
+}
+
+.video-overlay-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* One-hour circular depletion timer — top-left of the video frame */
+.video-hour-ring {
+  position: absolute;
+  top: calc(10px + env(safe-area-inset-top, 0px));
+  left: calc(10px + env(safe-area-inset-left, 0px));
+  z-index: 1;
+  width: 64px;
+  height: 64px;
+  pointer-events: none;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.65));
+}
+
+.video-hour-ring svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

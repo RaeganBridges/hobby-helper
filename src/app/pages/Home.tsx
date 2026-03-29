@@ -1,6 +1,25 @@
 import imgLogo1 from "figma:asset/89b09710aad68d4400b9fc8c7058b8276103e194.png";
 import { motion } from 'motion/react';
 
+const HOBBY_PLAY_STORAGE_KEYS = [
+  "games-played-weeks-v4",
+  "sewing-played-weeks-v4",
+  "reading-played-weeks-v4",
+  "car-repair-played-weeks-v4",
+  "games-played-weeks-v3",
+  "sewing-played-weeks-v3",
+  "reading-played-weeks-v3",
+  "car-repair-played-weeks-v3",
+] as const;
+
+function clearHobbyPlayProgress() {
+  try {
+    HOBBY_PLAY_STORAGE_KEYS.forEach((k) => localStorage.removeItem(k));
+  } catch {
+    /* ignore */
+  }
+}
+
 function HobbyCard({
   title,
   description,
@@ -42,10 +61,18 @@ export default function Home() {
           <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_5px_15px_10px_rgba(0,0,0,0.1)]" />
         </div>
         
-        {/* Logo */}
-        <div className="absolute h-[291px] left-[27px] top-[-18px] w-[366px]">
-          <img alt="Hobby Helper Logo" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgLogo1} />
-        </div>
+        {/* Logo — tap to restart from index and reset week play / check state */}
+        <button
+          type="button"
+          className="absolute h-[291px] left-[27px] top-[-18px] w-[366px] cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white rounded-sm"
+          aria-label="Hobby Helper — return to start and reset week play buttons"
+          onClick={() => {
+            clearHobbyPlayProgress();
+            window.location.assign("/index.html");
+          }}
+        >
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgLogo1} />
+        </button>
 
         {/* Hobby Cards */}
         <div className="absolute left-[-61px] top-[242px] w-[562.362px]">
