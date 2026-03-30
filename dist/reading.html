@@ -455,37 +455,27 @@
           var played = loadPlayed();
           if (!canOpenWeek(week, played)) return;
           if (played.has(week)) return;
-          var isFirstWeek4Complete = week === 4;
           var next = loadPlayed();
           next.add(week);
           savePlayed(next);
           refreshPlayStates();
-
-          function openVideo() {
-            try {
-              if (typeof openHobbyVideoEmbed === 'function') {
-                openHobbyVideoEmbed({
-                  src: videoSrcForWeek(week),
-                  closeStroke: CLOSE_STROKE,
-                  desktopBackdrop:
-                    window.HOBBY_FLOOD_RESET && window.HOBBY_FLOOD_RESET.desktopBackdrop,
-                });
-              } else {
-                window.location.assign(
-                  FALLBACK_VIDEO_PAGE + '?week=' + encodeURIComponent(week)
-                );
-              }
-            } catch (err) {
+          try {
+            if (typeof openHobbyVideoEmbed === 'function') {
+              openHobbyVideoEmbed({
+                src: videoSrcForWeek(week),
+                closeStroke: CLOSE_STROKE,
+                desktopBackdrop:
+                  window.HOBBY_FLOOD_RESET && window.HOBBY_FLOOD_RESET.desktopBackdrop,
+              });
+            } else {
               window.location.assign(
                 FALLBACK_VIDEO_PAGE + '?week=' + encodeURIComponent(week)
               );
             }
-          }
-
-          if (isFirstWeek4Complete && typeof runHobbyCompletionFlood === 'function') {
-            runHobbyCompletionFlood(openVideo);
-          } else {
-            openVideo();
+          } catch (err) {
+            window.location.assign(
+              FALLBACK_VIDEO_PAGE + '?week=' + encodeURIComponent(week)
+            );
           }
         });
       }
