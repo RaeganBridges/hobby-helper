@@ -1,13 +1,15 @@
 /**
  * Open a full-screen embedded MP4 player on the current page (no navigation).
- * Usage: openHobbyVideoEmbed({ src: '/games.mp4', closeStroke: '#e44058', desktopBackdrop: 'linear-gradient(...)' });
+ * Usage: openHobbyVideoEmbed({ src: '/games.mp4', week: 4, closeStroke: '#e44058', desktopBackdrop: 'linear-gradient(...)' });
  */
 (function () {
   var root, video, wrap, shell, frame, closeBtn, pathEl;
   var layoutApply = function () {};
   var hourRaf = null;
+  var embedWeek = 0;
+  var lastDesktopBackdrop = '';
   var onKeyDown = function (e) {
-    if (e.key === 'Escape') closeHobbyVideoEmbed();
+    if (e.key === 'Escape') requestCloseHobbyVideoEmbed();
   };
 
   function stopHourRing() {
@@ -98,7 +100,7 @@
     pathEl = root.querySelector('.hve-close-path');
 
     closeBtn.addEventListener('click', function () {
-      closeHobbyVideoEmbed();
+      requestCloseHobbyVideoEmbed();
     });
   }
 
@@ -179,6 +181,10 @@
       }
     }
 
+    lastDesktopBackdrop = opts.desktopBackdrop || '';
+    embedWeek =
+      opts.week != null ? parseInt(String(opts.week), 10) || 0 : 0;
+
     var ringColor = opts.hourRingColor || opts.closeStroke || '#ffffff';
     startHourRing(ringColor);
 
@@ -218,11 +224,13 @@
     });
   };
 
-  window.closeHobbyVideoEmbed = function () {
+  function closeHobbyVideoEmbedImmediate() {
     if (!root) return;
+    embedWeek = 0;
     if (wrap) {
       wrap.style.removeProperty('--hve-wrap-desktop-bg');
     }
+    lastDesktopBackdrop = '';
     stopHourRing();
     try {
       video.pause();
@@ -231,5 +239,25 @@
     root.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
     document.removeEventListener('keydown', onKeyDown);
-  };
+  }
+
+  function requestCloseHobbyVideoEmbed() {
+    if (!root) return;
+    if (
+      embedWeek === 4 &&
+      typeof window.runHobbyCloseFloodTransition === 'function'
+    ) {
+      window.runHobbyCloseFloodTransition({
+        desktopBackdrop:
+          lastDesktopBackdrop ||
+          (window.HOBBY_FLOOD_RESET && window.HOBBY_FLOOD_RESET.desktopBackdrop),
+        onOpaque: closeHobbyVideoEmbedImmediate,
+        onDone: function () {},
+      });
+    } else {
+      closeHobbyVideoEmbedImmediate();
+    }
+  }
+
+  window.closeHobbyVideoEmbed = requestCloseHobbyVideoEmbed;
 })();

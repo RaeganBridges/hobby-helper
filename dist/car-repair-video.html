@@ -6,6 +6,7 @@
   <meta name="view-transition" content="same-origin" />
   <title>Car Repair — Video — Hobby Helper</title>
   <link rel="stylesheet" href="page-transitions.css" />
+  <link rel="stylesheet" href="hobby-flood-reset.css" />
   <style>
     @font-face {
       font-family: 'Carp_VF_Trial:Regular';
@@ -221,6 +222,14 @@
       display: block;
     }
   </style>
+  <script>
+    window.HOBBY_VIDEO_CLOSE = {
+      desktopBackdrop: 'linear-gradient(to bottom, #e8f0ff, #b8cef0)',
+      secondSrc: '/images/flood/05-car.png',
+      floodImageSrc: '/images/flood/flood.png',
+    };
+  </script>
+  <script src="hobby-flood-reset.js"></script>
 </head>
 <body>
   <script src="reload-to-index.js"></script>
@@ -424,6 +433,34 @@
           else v.addEventListener(ev, tick);
         });
       } catch (ignore) {}
+    })();
+  </script>
+  <script>
+    (function () {
+      var close = document.querySelector('a.video-close');
+      if (!close) return;
+      var weekParam = new URLSearchParams(window.location.search).get('week');
+      var weekNum = weekParam != null ? parseInt(weekParam, 10) : NaN;
+      var href = close.getAttribute('href') || 'car-repair.html';
+      var vid = document.getElementById('car-video-el');
+      close.addEventListener('click', function (e) {
+        if (weekNum !== 4) return;
+        e.preventDefault();
+        if (typeof runHobbyCloseFloodTransition !== 'function') {
+          window.location.href = href;
+          return;
+        }
+        runHobbyCloseFloodTransition({
+          onOpaque: function () {
+            try {
+              if (vid) vid.pause();
+            } catch (x) {}
+          },
+          onDone: function () {
+            window.location.href = href;
+          },
+        });
+      });
     })();
   </script>
 </body>
