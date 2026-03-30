@@ -142,7 +142,7 @@
 #hobby-video-embed .hve-hour-bar-track {
   position: absolute;
   inset: 0;
-  background: color-mix(in srgb, var(--hve-bar-accent) 24%, transparent);
+  background: color-mix(in srgb, var(--hve-bar-accent) 32%, transparent);
 }
 
 #hobby-video-embed .hve-hour-bar-fill {

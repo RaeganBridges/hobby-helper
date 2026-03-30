@@ -20,9 +20,11 @@
   function startHourRing(ringColor) {
     stopHourRing();
     if (!root) return;
+    var bar = root.querySelector('.hve-hour-bar');
     var fill = root.querySelector('.hve-hour-bar-fill');
     if (!fill) return;
-    if (ringColor) fill.style.backgroundColor = ringColor;
+    var accent = ringColor || '#ffffff';
+    if (bar) bar.style.setProperty('--hve-bar-accent', accent);
     fill.style.transform = 'scaleX(1)';
 
     var HOUR_MS = 60 * 60 * 1000;

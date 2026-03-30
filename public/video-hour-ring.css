@@ -25,7 +25,7 @@
 .video-hour-bar-track {
   position: absolute;
   inset: 0;
-  background: color-mix(in srgb, var(--vhr-bar-accent) 24%, transparent);
+  background: color-mix(in srgb, var(--vhr-bar-accent) 32%, transparent);
 }
 
 .video-hour-bar-fill {
