@@ -124,21 +124,30 @@
   pointer-events: none;
 }
 
-#hobby-video-embed .hve-hour-ring {
+#hobby-video-embed .hve-hour-bar {
   position: absolute;
-  top: calc(22px + env(safe-area-inset-top, 0px));
-  left: calc(22px + env(safe-area-inset-left, 0px));
-  width: 64px;
-  height: 64px;
-  min-width: 64px;
-  min-height: 64px;
+  left: 0;
+  right: 0;
+  bottom: env(safe-area-inset-bottom, 0px);
+  height: 6px;
   pointer-events: none;
 }
 
-#hobby-video-embed .hve-hour-ring svg {
-  display: block;
-  width: 64px;
-  height: 64px;
+#hobby-video-embed .hve-hour-bar-track {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+#hobby-video-embed .hve-hour-bar-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  transform-origin: left center;
+  transform: scaleX(1);
+  background: #ffffff;
 }
 
 #hobby-video-embed .hve-close {

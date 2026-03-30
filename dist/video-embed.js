@@ -20,12 +20,12 @@
   function startHourRing(ringColor) {
     stopHourRing();
     if (!root) return;
-    var prog = root.querySelector('.hve-hour-progress');
-    if (!prog) return;
-    if (ringColor) prog.setAttribute('stroke', ringColor);
+    var fill = root.querySelector('.hve-hour-bar-fill');
+    if (!fill) return;
+    if (ringColor) fill.style.backgroundColor = ringColor;
+    fill.style.transform = 'scaleX(1)';
 
     var HOUR_MS = 60 * 60 * 1000;
-    var c = 2 * Math.PI * 32;
     var start = Date.now();
 
     function tick() {
@@ -35,7 +35,7 @@
       }
       var elapsed = Date.now() - start;
       var t = Math.min(1, Math.max(0, elapsed / HOUR_MS));
-      prog.setAttribute('stroke-dashoffset', String(c * t));
+      fill.style.transform = 'scaleX(' + (1 - t) + ')';
       if (t < 1) {
         hourRaf = requestAnimationFrame(tick);
       } else {
@@ -76,11 +76,10 @@
       '<source type="video/mp4" />' +
       '</video>' +
       '<div class="hve-overlay-layer">' +
-      '<div class="hve-hour-ring" aria-hidden="true">' +
-      '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">' +
-      '<circle cx="50" cy="50" r="32" fill="none" stroke="rgba(255,255,255,0.82)" stroke-width="8"/>' +
-      '<circle class="hve-hour-progress" cx="50" cy="50" r="32" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" transform="rotate(-90 50 50)" stroke-dasharray="201.06" stroke-dashoffset="0"/>' +
-      '</svg></div></div>' +
+      '<div class="hve-hour-bar" aria-hidden="true">' +
+      '<div class="hve-hour-bar-track"></div>' +
+      '<div class="hve-hour-bar-fill"></div>' +
+      '</div></div>' +
       '<button type="button" class="hve-close" aria-label="Close video">' +
       '<svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" overflow="visible">' +
       '<path class="hve-close-path" d="M 10 10 L 46 46 M 46 10 L 10 46" fill="none" stroke="#ffffff" stroke-width="11" stroke-linecap="round"/>' +
