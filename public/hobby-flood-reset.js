@@ -55,6 +55,10 @@
 
       document.body.appendChild(root);
 
+      if (CFG.desktopBackdrop) {
+        root.style.setProperty('--hh-flood-desktop-bg', CFG.desktopBackdrop);
+      }
+
       var baseEl = root.querySelector('.hh-flood-base');
       var overlayEl = root.querySelector('.hh-flood-overlay');
       if (!baseEl || !overlayEl) {

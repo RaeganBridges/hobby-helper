@@ -102,6 +102,7 @@ export default function Sewing() {
   };
 
   const handlePlayClick = (weekNumber: number) => {
+    if (playedWeeks.has(weekNumber)) return;
     const newPlayedWeeks = new Set(playedWeeks).add(weekNumber);
     setPlayedWeeks(newPlayedWeeks);
     localStorage.setItem('sewing-played-weeks-v4', JSON.stringify(Array.from(newPlayedWeeks)));
@@ -110,10 +111,17 @@ export default function Sewing() {
 
   const renderButton = (weekNumber: number, buttonStyles: string, rotationStyles?: string) => {
     const isPlayed = playedWeeks.has(weekNumber);
-    
+    const ord = ['', 'one', 'two', 'three', 'four'] as const;
+    const ariaLabel = isPlayed
+      ? `Week ${ord[weekNumber]} completed`
+      : `Play week ${ord[weekNumber]}`;
+
     const buttonContent = (
-      <button 
-        className={`relative block cursor-pointer overflow-visible rounded-full bg-transparent ${buttonStyles}`}
+      <button
+        type="button"
+        disabled={isPlayed}
+        className={`relative block overflow-visible rounded-full bg-transparent ${buttonStyles} ${isPlayed ? 'cursor-default' : 'cursor-pointer'}`}
+        aria-label={ariaLabel}
         onClick={() => handlePlayClick(weekNumber)}
       >
         {isPlayed ? (
@@ -322,7 +330,7 @@ export default function Sewing() {
 
       {floodOpen ? (
         <div
-          className="fixed inset-0 z-[99999] box-border flex items-center justify-center bg-[#e8bdd0] pt-[env(safe-area-inset-top,0px)] pr-[env(safe-area-inset-right,0px)] pb-[env(safe-area-inset-bottom,0px)] pl-[env(safe-area-inset-left,0px)] md:bg-gradient-to-b md:from-[#f5d8e8] md:to-[#deb6ce] md:p-6"
+          className="fixed inset-0 z-[99999] box-border flex items-center justify-center bg-[#e8bdd0] pt-[env(safe-area-inset-top,0px)] pr-[env(safe-area-inset-right,0px)] pb-[env(safe-area-inset-bottom,0px)] pl-[env(safe-area-inset-left,0px)] md:bg-gradient-to-b md:from-[#fff8e8] md:to-[#f0dfa0] md:p-6"
           aria-hidden
         >
           <div className="flex h-[min(100dvh,932px)] w-full max-w-[430px] flex-col overflow-hidden bg-[#d6648b] md:h-[min(932px,calc(100dvh-3rem))] md:rounded-[2.75rem] md:shadow-[0_25px_80px_-20px_rgba(0,0,0,0.35),0_0_0_1px_rgba(0,0,0,0.1)]">

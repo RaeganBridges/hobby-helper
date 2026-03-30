@@ -32,7 +32,10 @@ button.title[data-hobby-flood-title]:focus-visible {
 
 @media (min-width: 768px) {
   .hh-flood-overlay-root {
-    background: linear-gradient(to bottom, #f5d8e8, #deb6ce);
+    background: var(
+      --hh-flood-desktop-bg,
+      linear-gradient(to bottom, #ffd8ec, #f0a8cc)
+    );
     padding: 1.5rem 1rem;
   }
 }

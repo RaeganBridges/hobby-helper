@@ -105,7 +105,7 @@
 
     @media (min-width: 768px) {
       .page-wrap {
-        background: linear-gradient(to bottom, #f5d8e8, #deb6ce);
+        background: linear-gradient(to bottom, #ffeeef, #f0b8bc);
         padding: 1.5rem 1rem;
       }
       .shell {
@@ -177,9 +177,13 @@
       overflow: visible;
       pointer-events: none;
     }
-    .play-btn:disabled {
+    .play-btn:disabled:not(.play-btn-complete) {
       opacity: 0.38;
       cursor: not-allowed;
+    }
+    .play-btn.play-btn-complete:disabled {
+      opacity: 1;
+      cursor: default;
     }
 
     .play-1 { position: absolute; top: 239px; right: 3px; }
@@ -341,6 +345,7 @@
     window.HOBBY_FLOOD_RESET = {
       keys: ['games-played-weeks-v4', 'games-played-weeks-v3'],
       secondSrc: '/images/flood/02-games.png',
+      desktopBackdrop: 'linear-gradient(to bottom, #ffeeef, #f0b8bc)',
     };
   </script>
   <script src="hobby-flood-reset.js"></script>
@@ -432,13 +437,19 @@
         btn.addEventListener('click', function () {
           var played = loadPlayed();
           if (!canOpenWeek(week, played)) return;
+          if (played.has(week)) return;
           var next = loadPlayed();
           next.add(week);
           savePlayed(next);
           refreshPlayStates();
           try {
             if (typeof openHobbyVideoEmbed === 'function') {
-              openHobbyVideoEmbed({ src: videoSrcForWeek(week), closeStroke: CLOSE_STROKE });
+              openHobbyVideoEmbed({
+                src: videoSrcForWeek(week),
+                closeStroke: CLOSE_STROKE,
+                desktopBackdrop:
+                  window.HOBBY_FLOOD_RESET && window.HOBBY_FLOOD_RESET.desktopBackdrop,
+              });
             } else {
               window.location.assign(
                 FALLBACK_VIDEO_PAGE + '?week=' + encodeURIComponent(week)

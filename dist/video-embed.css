@@ -84,7 +84,10 @@
 
 @media (min-width: 768px) {
   #hobby-video-embed .hve-page-wrap {
-    background: linear-gradient(to bottom, #f5d8e8, #deb6ce);
+    background: var(
+      --hve-wrap-desktop-bg,
+      linear-gradient(to bottom, #ffd8ec, #f0a8cc)
+    );
     padding: 1.5rem 1rem;
   }
   #hobby-video-embed .hve-shell {

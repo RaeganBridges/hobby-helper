@@ -106,7 +106,7 @@
 
     @media (min-width: 768px) {
       .page-wrap {
-        background: linear-gradient(to bottom, #f5d8e8, #deb6ce);
+        background: linear-gradient(to bottom, #e8f0ff, #b8cef0);
         padding: 1.5rem 1rem;
       }
       .shell {
@@ -178,9 +178,13 @@
       overflow: visible;
       pointer-events: none;
     }
-    .play-btn:disabled {
+    .play-btn:disabled:not(.play-btn-complete) {
       opacity: 0.38;
       cursor: not-allowed;
+    }
+    .play-btn.play-btn-complete:disabled {
+      opacity: 1;
+      cursor: default;
     }
 
     .play-1 { position: absolute; top: 239px; right: 3px; }
@@ -342,6 +346,7 @@
     window.HOBBY_FLOOD_RESET = {
       keys: ['car-repair-played-weeks-v4', 'car-repair-played-weeks-v3'],
       secondSrc: '/images/flood/05-car.png',
+      desktopBackdrop: 'linear-gradient(to bottom, #e8f0ff, #b8cef0)',
     };
   </script>
   <script src="hobby-flood-reset.js"></script>
@@ -400,9 +405,13 @@
       }
       function setUnlockedState(btn, week, played) {
         if (!btn) return;
+        var done = played.has(week);
         var open = canOpenWeek(week, played);
-        btn.disabled = !open;
-        btn.setAttribute('aria-disabled', open ? 'false' : 'true');
+        var canPlay = open && !done;
+        btn.disabled = !canPlay;
+        if (done) btn.classList.add('play-btn-complete');
+        else btn.classList.remove('play-btn-complete');
+        btn.setAttribute('aria-disabled', canPlay ? 'false' : 'true');
         var base =
           week === 1
             ? 'Play week one'
@@ -411,7 +420,16 @@
               : week === 3
                 ? 'Play week three'
                 : 'Play week four';
-        btn.setAttribute('aria-label', open ? base : base + ' (complete previous week first)');
+        var doneLabel =
+          week === 1
+            ? 'Week one completed'
+            : week === 2
+              ? 'Week two completed'
+              : week === 3
+                ? 'Week three completed'
+                : 'Week four completed';
+        var label = done ? doneLabel : open ? base : base + ' (complete previous week first)';
+        btn.setAttribute('aria-label', label);
       }
       function refreshPlayStates() {
         var played = loadPlayed();
@@ -433,13 +451,19 @@
         btn.addEventListener('click', function () {
           var played = loadPlayed();
           if (!canOpenWeek(week, played)) return;
+          if (played.has(week)) return;
           var next = loadPlayed();
           next.add(week);
           savePlayed(next);
           refreshPlayStates();
           try {
             if (typeof openHobbyVideoEmbed === 'function') {
-              openHobbyVideoEmbed({ src: videoSrcForWeek(week), closeStroke: CLOSE_STROKE });
+              openHobbyVideoEmbed({
+                src: videoSrcForWeek(week),
+                closeStroke: CLOSE_STROKE,
+                desktopBackdrop:
+                  window.HOBBY_FLOOD_RESET && window.HOBBY_FLOOD_RESET.desktopBackdrop,
+              });
             } else {
               window.location.assign(
                 FALLBACK_VIDEO_PAGE + '?week=' + encodeURIComponent(week)

@@ -1,6 +1,6 @@
 /**
  * Open a full-screen embedded MP4 player on the current page (no navigation).
- * Usage: openHobbyVideoEmbed({ src: '/games.mp4', closeStroke: '#e44058' });
+ * Usage: openHobbyVideoEmbed({ src: '/games.mp4', closeStroke: '#e44058', desktopBackdrop: 'linear-gradient(...)' });
  */
 (function () {
   var root, video, wrap, shell, frame, closeBtn, pathEl;
@@ -169,6 +169,14 @@
       pathEl.setAttribute('stroke', opts.closeStroke);
     }
 
+    if (wrap) {
+      if (opts.desktopBackdrop) {
+        wrap.style.setProperty('--hve-wrap-desktop-bg', opts.desktopBackdrop);
+      } else {
+        wrap.style.removeProperty('--hve-wrap-desktop-bg');
+      }
+    }
+
     var ringColor = opts.hourRingColor || opts.closeStroke || '#ffffff';
     startHourRing(ringColor);
 
@@ -210,6 +218,9 @@
 
   window.closeHobbyVideoEmbed = function () {
     if (!root) return;
+    if (wrap) {
+      wrap.style.removeProperty('--hve-wrap-desktop-bg');
+    }
     stopHourRing();
     try {
       video.pause();
