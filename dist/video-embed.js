@@ -17,39 +17,15 @@
     }
   }
 
-  /** Light tint of accent hex for the disc behind the ring (replaces flat black). */
-  function fillForAccent(hex) {
-    if (!hex || typeof hex !== 'string') {
-      return 'rgba(255, 250, 252, 0.9)';
-    }
-    var h = hex.trim().replace(/^#/, '');
-    if (h.length === 3) {
-      h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
-    }
-    if (h.length !== 6 || !/^[a-f0-9]+$/i.test(h)) {
-      return 'rgba(255, 250, 252, 0.9)';
-    }
-    var r = parseInt(h.slice(0, 2), 16);
-    var g = parseInt(h.slice(2, 4), 16);
-    var b = parseInt(h.slice(4, 6), 16);
-    var t = 0.55;
-    r = Math.round(r + (255 - r) * t);
-    g = Math.round(g + (255 - g) * t);
-    b = Math.round(b + (255 - b) * t);
-    return 'rgba(' + r + ',' + g + ',' + b + ',0.88)';
-  }
-
   function startHourRing(ringColor) {
     stopHourRing();
     if (!root) return;
     var prog = root.querySelector('.hve-hour-progress');
     if (!prog) return;
     if (ringColor) prog.setAttribute('stroke', ringColor);
-    var back = root.querySelector('.hve-hour-back');
-    if (back) back.setAttribute('fill', fillForAccent(ringColor || '#ffffff'));
 
     var HOUR_MS = 60 * 60 * 1000;
-    var c = 2 * Math.PI * 43;
+    var c = 2 * Math.PI * 32;
     var storageKey = 'hh-video-hour-start:hve:' + location.pathname;
     var now = Date.now();
     var start;
@@ -116,9 +92,8 @@
       '<div class="hve-overlay-layer">' +
       '<div class="hve-hour-ring" aria-hidden="true">' +
       '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">' +
-      '<circle class="hve-hour-back" cx="50" cy="50" r="50" fill="rgba(255,250,252,0.9)"/>' +
-      '<circle cx="50" cy="50" r="43" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="5.5"/>' +
-      '<circle class="hve-hour-progress" cx="50" cy="50" r="43" fill="none" stroke="#ffffff" stroke-width="5.5" stroke-linecap="round" transform="rotate(-90 50 50)" stroke-dasharray="270.18" stroke-dashoffset="0"/>' +
+      '<circle cx="50" cy="50" r="32" fill="none" stroke="rgba(255,255,255,0.82)" stroke-width="8"/>' +
+      '<circle class="hve-hour-progress" cx="50" cy="50" r="32" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" transform="rotate(-90 50 50)" stroke-dasharray="201.06" stroke-dashoffset="0"/>' +
       '</svg></div></div>' +
       '<button type="button" class="hve-close" aria-label="Close video">' +
       '<svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" overflow="visible">' +

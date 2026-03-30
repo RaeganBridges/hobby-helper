@@ -25,22 +25,24 @@
   }
 
   var color = wrap.getAttribute('data-ring-color') || '#ffffff';
-  var r = 43;
+  var r = 32;
+  var sw = 8;
   var c = 2 * Math.PI * r;
 
   wrap.innerHTML =
     '<svg class="vhr-svg" viewBox="0 0 100 100" aria-hidden="true" focusable="false">' +
-    '<circle class="vhr-glow" cx="50" cy="50" r="' +
-    (r + 7) +
-    '" fill="rgba(0,0,0,0.55)" />' +
     '<circle class="vhr-track" cx="50" cy="50" r="' +
     r +
-    '" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="5.5" />' +
+    '" fill="none" stroke="rgba(255,255,255,0.82)" stroke-width="' +
+    sw +
+    '" />' +
     '<circle class="vhr-progress" cx="50" cy="50" r="' +
     r +
     '" fill="none" stroke="' +
     color +
-    '" stroke-width="5.5" stroke-linecap="round" transform="rotate(-90 50 50)" ' +
+    '" stroke-width="' +
+    sw +
+    '" stroke-linecap="round" transform="rotate(-90 50 50)" ' +
     'stroke-dasharray="' +
     c +
     '" stroke-dashoffset="0" />' +
