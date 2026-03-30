@@ -1,6 +1,6 @@
 /**
  * Open a full-screen embedded MP4 player on the current page (no navigation).
- * Usage: openHobbyVideoEmbed({ src: '/games.mp4', closeStroke: '#e86775' });
+ * Usage: openHobbyVideoEmbed({ src: '/games.mp4', closeStroke: '#ea556c' });
  */
 (function () {
   var root, video, wrap, shell, frame, closeBtn, pathEl;
