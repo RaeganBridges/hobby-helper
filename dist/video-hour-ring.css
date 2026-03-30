@@ -12,8 +12,8 @@
 
 .video-hour-bar {
   position: absolute;
-  left: calc(18px + env(safe-area-inset-left, 0px));
-  right: calc(18px + env(safe-area-inset-right, 0px));
+  left: calc(32px + env(safe-area-inset-left, 0px));
+  right: calc(32px + env(safe-area-inset-right, 0px));
   bottom: calc(14px + env(safe-area-inset-bottom, 0px));
   height: 11px;
   border-radius: 999px;
