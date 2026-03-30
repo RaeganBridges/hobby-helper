@@ -144,19 +144,22 @@
     }
     .video-hour-ring {
       position: absolute;
-      top: calc(10px + env(safe-area-inset-top, 0px));
-      left: calc(10px + env(safe-area-inset-left, 0px));
-      width: 68px;
-      height: 68px;
-      min-width: 68px;
-      min-height: 68px;
+      top: calc(22px + env(safe-area-inset-top, 0px));
+      left: calc(22px + env(safe-area-inset-left, 0px));
+      width: 78px;
+      height: 78px;
+      min-width: 78px;
+      min-height: 78px;
       pointer-events: none;
-      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.85));
+      --vhr-accent: #40669a;
+    }
+    .video-hour-ring .vhr-back {
+      fill: color-mix(in srgb, var(--vhr-accent) 38%, white);
     }
     .video-hour-ring svg {
       display: block;
-      width: 68px;
-      height: 68px;
+      width: 78px;
+      height: 78px;
     }
 
     .video-close {
@@ -233,9 +236,9 @@
       <div class="video-overlay-layer">
         <div class="video-hour-ring" aria-hidden="true">
           <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-            <circle cx="50" cy="50" r="46" fill="rgba(0,0,0,0.65)" />
-            <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="5" />
-            <circle class="vhr-progress" cx="50" cy="50" r="40" fill="none" stroke="#40669a" stroke-width="5" stroke-linecap="round" transform="rotate(-90 50 50)" stroke-dasharray="251.33" stroke-dashoffset="0" />
+            <circle class="vhr-back" cx="50" cy="50" r="50" />
+            <circle cx="50" cy="50" r="43" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="5.5" />
+            <circle class="vhr-progress" cx="50" cy="50" r="43" fill="none" stroke="#40669a" stroke-width="5.5" stroke-linecap="round" transform="rotate(-90 50 50)" stroke-dasharray="270.18" stroke-dashoffset="0" />
           </svg>
         </div>
       </div>
@@ -252,7 +255,7 @@
       var prog = document.querySelector('.video-hour-ring .vhr-progress');
       if (!prog) return;
       var HOUR_MS = 60 * 60 * 1000;
-      var c = 2 * Math.PI * 40;
+      var c = 2 * Math.PI * 43;
       var storageKey = 'hh-video-hour-start:' + location.pathname;
       var now = Date.now();
       var start;

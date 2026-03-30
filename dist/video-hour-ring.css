@@ -10,18 +10,19 @@
   pointer-events: none;
 }
 
-/* One-hour circular depletion timer — top-left of the video frame */
+/* One-hour circular depletion timer — top-left of the video frame (pages inline their own rules) */
 .video-hour-ring {
   position: absolute;
-  top: calc(10px + env(safe-area-inset-top, 0px));
-  left: calc(10px + env(safe-area-inset-left, 0px));
+  top: calc(22px + env(safe-area-inset-top, 0px));
+  left: calc(22px + env(safe-area-inset-left, 0px));
   z-index: 1;
-  width: 64px;
-  height: 64px;
+  width: 78px;
+  height: 78px;
+  min-width: 78px;
+  min-height: 78px;
   pointer-events: none;
   transform: translateZ(0);
   -webkit-transform: translateZ(0);
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.65));
 }
 
 .video-hour-ring svg {
