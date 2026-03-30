@@ -195,6 +195,10 @@
       overflow: visible;
       pointer-events: none;
     }
+    .play-btn:disabled {
+      opacity: 0.38;
+      cursor: not-allowed;
+    }
 
     .play-1 { position: absolute; top: 239px; right: 3px; }
     .play-wrap-2 { position: absolute; top: 387px; right: 3px; transform: rotate(5deg); }
@@ -434,8 +438,44 @@
       function savePlayed(set) {
         localStorage.setItem(KEY, JSON.stringify(Array.from(set)));
       }
+      var PLAY_BTNS = [
+        { btn: document.querySelector('.play-btn.play-1'), week: 1 },
+        { btn: document.querySelector('.play-wrap-2 .play-btn'), week: 2 },
+        { btn: document.querySelector('.play-btn.play-3'), week: 3 },
+        { btn: document.querySelector('.play-wrap-4 .play-btn'), week: 4 },
+      ];
+
       function apply(btn, week, played) {
         btn.innerHTML = played.has(week) ? CHECK_HTML : PLAY_HTML;
+      }
+      function canOpenWeek(week, played) {
+        if (week <= 1) return true;
+        if (played.has(week)) return true;
+        return played.has(week - 1);
+      }
+      function setUnlockedState(btn, week, played) {
+        if (!btn) return;
+        var open = canOpenWeek(week, played);
+        btn.disabled = !open;
+        btn.setAttribute('aria-disabled', open ? 'false' : 'true');
+        var base =
+          week === 1
+            ? 'Play week one'
+            : week === 2
+              ? 'Play week two'
+              : week === 3
+                ? 'Play week three'
+                : 'Play week four';
+        btn.setAttribute('aria-label', open ? base : base + ' (complete previous week first)');
+      }
+      function refreshPlayStates() {
+        var played = loadPlayed();
+        for (var i = 0; i < PLAY_BTNS.length; i++) {
+          var item = PLAY_BTNS[i];
+          if (!item.btn) continue;
+          apply(item.btn, item.week, played);
+          setUnlockedState(item.btn, item.week, played);
+        }
       }
       function videoSrcForWeek(week) {
         if (week === 2) return VIDEO_WEEK_TWO;
@@ -445,13 +485,13 @@
       }
       function bind(btn, week) {
         if (!btn) return;
-        var played = loadPlayed();
-        apply(btn, week, played);
         btn.addEventListener('click', function () {
+          var played = loadPlayed();
+          if (!canOpenWeek(week, played)) return;
           var next = loadPlayed();
           next.add(week);
           savePlayed(next);
-          apply(btn, week, next);
+          refreshPlayStates();
           try {
             if (typeof openHobbyVideoEmbed === 'function') {
               openHobbyVideoEmbed({ src: videoSrcForWeek(week), closeStroke: CLOSE_STROKE });
@@ -467,10 +507,10 @@
           }
         });
       }
-      bind(document.querySelector('.play-btn.play-1'), 1);
-      bind(document.querySelector('.play-wrap-2 .play-btn'), 2);
-      bind(document.querySelector('.play-btn.play-3'), 3);
-      bind(document.querySelector('.play-wrap-4 .play-btn'), 4);
+      for (var j = 0; j < PLAY_BTNS.length; j++) {
+        bind(PLAY_BTNS[j].btn, PLAY_BTNS[j].week);
+      }
+      refreshPlayStates();
     })();
   </script>
 </body>

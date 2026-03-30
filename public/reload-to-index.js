@@ -1,18 +1,25 @@
 /**
  * Hard / soft full page reload → send user to the splash (index.html).
  * First navigation (link, address bar) is unaffected.
- * Hobby hub pages (week grid + title flood reset) stay on the same URL when reloaded.
+ * Hobby hub pages (week grid + title flood reset) and standalone *-video pages stay on the
+ * same URL when reloaded — including clean URLs without a .html suffix (e.g. /car-repair).
  */
 (function () {
   var path = typeof location !== 'undefined' && location.pathname ? location.pathname : '';
-  var file = path.split('/').pop() || '';
-  var hobbyHubStay = [
-    'sewing.html',
-    'games.html',
-    'reading.html',
-    'car-repair.html',
+  var seg = path.split('/').pop() || '';
+  var base = seg.replace(/\.html$/i, '').toLowerCase();
+
+  var stayOnReload = [
+    'sewing',
+    'games',
+    'reading',
+    'car-repair',
+    'sewing-video',
+    'games-video',
+    'reading-video',
+    'car-repair-video',
   ];
-  if (hobbyHubStay.indexOf(file) !== -1) {
+  if (stayOnReload.indexOf(base) !== -1) {
     return;
   }
 
