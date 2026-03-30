@@ -26,21 +26,7 @@
 
     var HOUR_MS = 60 * 60 * 1000;
     var c = 2 * Math.PI * 32;
-    var storageKey = 'hh-video-hour-start:hve:' + location.pathname;
-    var now = Date.now();
-    var start;
-    try {
-      var raw = sessionStorage.getItem(storageKey);
-      var parsed = raw ? parseInt(raw, 10) : NaN;
-      if (!isFinite(parsed) || parsed > now) {
-        start = now;
-        sessionStorage.setItem(storageKey, String(start));
-      } else {
-        start = parsed;
-      }
-    } catch (e) {
-      start = now;
-    }
+    var start = Date.now();
 
     function tick() {
       if (!root || !root.classList.contains('hve-visible')) {

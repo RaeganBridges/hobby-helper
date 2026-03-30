@@ -1,28 +1,12 @@
 /**
- * Circular ring that depletes from full to empty over 60 minutes (wall time).
- * Start time is stored in sessionStorage per video page path so returning in the same tab continues the hour.
+ * Circular ring that depletes from full to empty over 60 minutes (wall time on this page).
  */
 (function () {
   var wrap = document.querySelector('.video-hour-ring');
   if (!wrap) return;
 
   var HOUR_MS = 60 * 60 * 1000;
-  var storageKey = 'hh-video-hour-start:' + location.pathname;
-  var now = Date.now();
-  var start;
-
-  try {
-    var raw = sessionStorage.getItem(storageKey);
-    var parsed = raw ? parseInt(raw, 10) : NaN;
-    if (!isFinite(parsed) || parsed > now) {
-      start = now;
-      sessionStorage.setItem(storageKey, String(start));
-    } else {
-      start = parsed;
-    }
-  } catch (e) {
-    start = now;
-  }
+  var start = Date.now();
 
   var color = wrap.getAttribute('data-ring-color') || '#ffffff';
   var r = 32;
