@@ -54,6 +54,7 @@
         '</div></div>';
 
       document.body.appendChild(root);
+      document.documentElement.classList.add('hh-flood-lock');
 
       if (CFG.desktopBackdrop) {
         root.style.setProperty('--hh-flood-desktop-bg', CFG.desktopBackdrop);
@@ -63,6 +64,7 @@
       var overlayEl = root.querySelector('.hh-flood-overlay');
       if (!baseEl || !overlayEl) {
         root.remove();
+        document.documentElement.classList.remove('hh-flood-lock');
         window.location.reload();
         return;
       }
@@ -83,6 +85,7 @@
         crossfadeThen(function () {
           window.setTimeout(function () {
             root.remove();
+            document.documentElement.classList.remove('hh-flood-lock');
             window.location.reload();
           }, framesToMs(OTHER_HOLD_FRAMES));
         });
@@ -149,6 +152,7 @@
       '</div></div>';
 
     document.body.appendChild(root);
+    document.documentElement.classList.add('hh-flood-lock');
 
     if (desk) {
       root.style.setProperty('--hh-flood-desktop-bg', desk);
@@ -157,6 +161,7 @@
     var img = root.querySelector('.hh-flood-close-img');
     if (!img) {
       root.remove();
+      document.documentElement.classList.remove('hh-flood-lock');
       onOpaque();
       onDone();
       return;
@@ -181,6 +186,7 @@
       if (root.parentNode) {
         root.remove();
       }
+      document.documentElement.classList.remove('hh-flood-lock');
       onDone();
     }
 

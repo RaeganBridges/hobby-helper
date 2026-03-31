@@ -57,6 +57,16 @@ button.title[data-hobby-flood-title]:focus-visible {
  * nothing visible. Keep a definite shell height (same as desktop cap).
  */
 @media (max-width: 767px) {
+  html.hh-flood-lock,
+  html.hh-flood-lock body {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    overflow: hidden;
+  }
+
   .hh-flood-overlay-root,
   .hh-flood-close-root {
     flex-direction: column;
