@@ -84,7 +84,7 @@
         inset: 0;
         z-index: 0;
         min-height: 0;
-        padding: 0 env(safe-area-inset-right, 0px)
+        padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
           env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
         box-sizing: border-box;
         flex-direction: column;
@@ -97,10 +97,9 @@
         min-height: 0;
         width: 100%;
         max-width: 430px;
-        height: 100%;
-        max-height: 100%;
+        height: auto !important;
         margin: 0 auto;
-        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
       }
     }
 

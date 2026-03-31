@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="view-transition" content="same-origin" />
   <title>Hobbies — Hobby Helper</title>
-  <link rel="icon" type="image/svg+xml" href="/favicon-light.svg" media="(prefers-color-scheme: light)" />
-  <link rel="icon" type="image/svg+xml" href="/favicon-dark.svg" media="(prefers-color-scheme: dark)" />
-  <link rel="icon" type="image/png" sizes="64x64" href="/hh-logo-favicon-64.png" />
   <link rel="stylesheet" href="page-transitions.css" />
   <style>
     @font-face {
@@ -86,7 +83,7 @@
         inset: 0;
         z-index: 0;
         min-height: 0;
-        padding: 0 env(safe-area-inset-right, 0px)
+        padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
           env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
         box-sizing: border-box;
         flex-direction: column;
@@ -99,10 +96,9 @@
         min-height: 0;
         width: 100%;
         max-width: 430px;
-        height: 100%;
-        max-height: 100%;
+        height: auto !important;
         margin: 0 auto;
-        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
       }
     }
 
